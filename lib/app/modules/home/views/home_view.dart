@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:only_u/app/common/widgets/CustomButton.dart';
+import 'package:only_u/app/common/widgets/welcome_widget.dart';
 import 'package:only_u/app/data/constants.dart';
 
 import '../controllers/home_controller.dart';
@@ -10,7 +11,7 @@ class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
 
   void redirectToRegister() {
-    //Todo
+    Get.toNamed("/signin");
   }
 
   void redirectToLogin() {
@@ -66,14 +67,7 @@ class HomeView extends GetView<HomeController> {
   }
 
   Widget _buildWelcomeTextView() {
-    return Container(
-      alignment: Alignment.topLeft,
-      margin: EdgeInsets.only(left: 20),
-      child: Text(
-        "Welcome to OnlyU",
-        style: redHeadingStyle,
-      ),
-    );
+    return WelcomWidget();
   }
 
   Widget _buildDivider() {
@@ -103,10 +97,7 @@ class HomeView extends GetView<HomeController> {
     return Container(
       margin: EdgeInsets.only(left: 20),
       alignment: Alignment.topLeft,
-      child: Text(
-        "Signup to continue",
-        style: whiteSubHeadingStyle,
-      ),
+      child: Text("Signup to continue", style: whiteSubHeadingStyle),
     );
   }
 
@@ -114,7 +105,9 @@ class HomeView extends GetView<HomeController> {
     return CustomButton(
       title: 'Login With Email',
       icon: "assets/imgs/mail.png",
-      onPressed: () {},
+      onPressed: () {
+        Get.toNamed("/signin");
+      },
     );
   }
 
@@ -122,7 +115,9 @@ class HomeView extends GetView<HomeController> {
     return CustomButton(
       title: 'Google',
       icon: "assets/imgs/google.png",
-      onPressed: () {},
+      onPressed: () {
+        //Todo
+      },
     );
   }
 
