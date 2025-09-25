@@ -29,7 +29,7 @@ class HomeView extends GetView<HomeController> {
 
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xFF1E1E1E), Color(0xFF1E1E1E)], // sample bg
+      colors: [Colors.black, Colors.black],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),

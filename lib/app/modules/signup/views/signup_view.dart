@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -8,11 +7,10 @@ import 'package:only_u/app/common/widgets/TermsCheckBox.dart';
 import 'package:only_u/app/common/widgets/welcome_widget.dart';
 import 'package:only_u/app/data/constants.dart';
 
-import '../controllers/signin_controller.dart';
+import '../controllers/signup_controller.dart';
 
-class SigninView extends GetView<SigninController> {
-  const SigninView({super.key});
-
+class SignupView extends GetView<SignupController> {
+  const SignupView({super.key});
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -24,7 +22,7 @@ class SigninView extends GetView<SigninController> {
 
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-         colors: [Colors.black, Colors.black],
+              colors: [Colors.black, Colors.black],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
@@ -42,7 +40,7 @@ class SigninView extends GetView<SigninController> {
                 SizedBox(height: 10),
                 _buildEmailField(),
                 SizedBox(height: 20),
-                _buildLabel('Password'),
+                _buildLabel('Create Password'),
                 SizedBox(height: 10),
                 _buildPasswordField(),
                 SizedBox(height: 10),
@@ -115,7 +113,7 @@ class SigninView extends GetView<SigninController> {
 
   Widget _buildRegisterBtn() {
     return CustomButton(
-      title: 'Login',
+      title: 'Register',
       onPressed: () {
         //Todo
       },
@@ -124,12 +122,12 @@ class SigninView extends GetView<SigninController> {
 
   Widget _buildAlreadyGotAnAccountWidget() {
     return InkWell(
-      onTap: () => Get.toNamed('/signup'),
+      onTap: () => Get.toNamed('/signin'),
       child: RichText(
         text: const TextSpan(
           children: [
             TextSpan(
-              text: "Don’t have an account? ",
+              text: "Already got an account? ",
               style: TextStyle(
                 color: Color(0xFFFFF7FA),
                 fontSize: 14,
@@ -137,7 +135,7 @@ class SigninView extends GetView<SigninController> {
               ),
             ),
             TextSpan(
-              text: "Signup Here",
+              text: "Signin Here",
               style: TextStyle(
                 color: Color(0xFFFF3080),
                 fontSize: 14,
