@@ -1,4 +1,4 @@
-package com.onlyyou.only_u
+package com.onlyyou.app
 
 import io.flutter.embedding.android.FlutterActivity
 
