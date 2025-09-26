@@ -3,28 +3,11 @@ import 'package:get/get.dart';
 import 'package:only_u/app/services/auth_service.dart';
 
 class SigninController extends GetxController {
- 
-
   var termsAndConditionsChecked = false.obs;
   var isLoading = false.obs;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final AuthService authService = AuthService();
-
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   void updateTermsAndConditionsValue(bool v) {
     termsAndConditionsChecked.value = v;
@@ -49,11 +32,10 @@ class SigninController extends GetxController {
     if (user != null) {
       Get.snackbar("Success", "Logged in successfully");
       // Navigate to home or dashboard
-      Get.offAllNamed('/home'); // Adjust route as necessary
+      Get.offAllNamed('/main');
     } else {
       Get.snackbar("Error", "Login failed. Please check your credentials.");
     }
-        isLoading.value = false;
+    isLoading.value = false;
   }
-  
 }

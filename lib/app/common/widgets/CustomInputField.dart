@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
 class Custominputfield extends StatelessWidget {
-  Custominputfield({super.key, this.hintText, this.controller});
+  Custominputfield({super.key, this.hintText, this.controller,this.obscureText = false});
   TextEditingController? controller;
   String? hintText ;
+  bool obscureText ;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: TextField(
+        obscureText: obscureText,
         controller: controller,
         style: const TextStyle(
           color: Color(0xFFE7F6FF), // input text color

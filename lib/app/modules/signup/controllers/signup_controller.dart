@@ -9,20 +9,6 @@ class SignupController extends GetxController {
   final TextEditingController passwordController = TextEditingController();
   final AuthService authService = AuthService();
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   void updateTermsAndConditionsValue(bool v) {
     termsAndConditionsChecked.value = v;
@@ -47,7 +33,7 @@ class SignupController extends GetxController {
     if (user != null) {
       Get.snackbar("Success", "Account created successfully");
       // Navigate to home or dashboard
-      Get.offAllNamed('/home'); // Adjust route as necessary
+      Get.offAllNamed('/main'); // Adjust route as necessary
     } else {
       Get.snackbar("Error", "Sign Up failed. Please try again.");
     }

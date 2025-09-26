@@ -101,6 +101,7 @@ class SignupView extends GetView<SignupController> {
     return Custominputfield(
       hintText: "e.g john@123",
       controller: controller.passwordController,
+      obscureText: true,
     );
   }
 

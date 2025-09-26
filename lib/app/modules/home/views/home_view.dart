@@ -15,8 +15,7 @@ class HomeView extends GetView<HomeController> {
   }
 
   void redirectToLogin() {
-    // Get.toNamed("/login");
-    //Todo
+    Get.toNamed("/signin");
   }
 
   @override
