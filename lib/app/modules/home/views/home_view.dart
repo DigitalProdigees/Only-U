@@ -115,7 +115,7 @@ class HomeView extends GetView<HomeController> {
       title: 'Google',
       icon: "assets/imgs/google.png",
       onPressed: () {
-        //Todo
+        controller.googleSignIn();
       },
     );
   }

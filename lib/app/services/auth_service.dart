@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:only_u/app/services/google_sign_in_service.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignInService googleSignInService = GoogleSignInService();
 
   // Sign up
   Future<User?> signUp(String email, String password) async {
@@ -33,7 +35,7 @@ class AuthService {
 
   // Logout
   Future<void> logout() async {
-    await _auth.signOut();
+    await googleSignInService.signOut();
   }
 
   // Stream to check auth state
