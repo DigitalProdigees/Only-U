@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:only_u/app/common/widgets/CustomButton.dart';
 import 'package:only_u/app/common/widgets/CustomInputField.dart';
+import 'package:only_u/app/common/widgets/LoadingView.dart';
 import 'package:only_u/app/common/widgets/TermsCheckBox.dart';
 import 'package:only_u/app/common/widgets/welcome_widget.dart';
 import 'package:only_u/app/data/constants.dart';
@@ -112,11 +113,15 @@ class SignupView extends GetView<SignupController> {
   }
 
   Widget _buildRegisterBtn() {
-    return CustomButton(
-      title: 'Register',
-      onPressed: () {
-        //Todo
-      },
+    return Obx(
+      () => controller.isLoading.value
+          ? LoadingView()
+          : CustomButton(
+              title: 'Register',
+              onPressed: () {
+                controller.signUp();
+              },
+            ),
     );
   }
 
