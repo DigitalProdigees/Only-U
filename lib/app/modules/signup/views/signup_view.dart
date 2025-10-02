@@ -71,7 +71,7 @@ class SignupView extends GetView<SignupController> {
     return Container(
       margin: EdgeInsets.only(left: 10),
       alignment: Alignment.topLeft,
-      child: Text("Sign in with Email", style: whiteSubHeadingStyle),
+      child: Text("Sign up with Email", style: whiteSubHeadingStyle),
     );
   }
 
@@ -141,7 +141,7 @@ class SignupView extends GetView<SignupController> {
               ),
             ),
             TextSpan(
-              text: "Signin Here",
+              text: "Sign in Here",
               style: TextStyle(
                 color: Color(0xFFFF3080),
                 fontSize: 14,
