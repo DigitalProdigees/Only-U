@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:only_u/app/common/widgets/PostView.dart';
+import 'package:only_u/app/data/models/post_model.dart';
 import '../controllers/main_controller.dart';
 
 class MainView extends GetView<MainController> {
@@ -34,7 +35,7 @@ class MainView extends GetView<MainController> {
                 SizedBox(height: 20),
                 _buildHighlightView(),
                 SizedBox(height: 10),
-                PostView(),
+                _buildPostsListView(),
               ],
             ),
           ),
@@ -361,5 +362,34 @@ class MainView extends GetView<MainController> {
         ),
       ),
     );
+  }
+
+  Widget _buildPostsListView() {
+    return Obx(() {
+      if (controller.posts.isEmpty) {
+        return Center(
+          child: Text(
+            'No posts available',
+            style: TextStyle(color: Colors.white),
+          ),
+        );
+      }
+
+      return ListView.separated(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index) {
+          final post = PostModel.fromJson(controller.posts[index]);
+          if (index == controller.posts.length - 1) {
+            // Load more posts when reaching the end of the list
+            controller.currentPostsPage += 1;
+            controller.loadPosts();
+          }
+          return PostView(post: post);
+        },
+        separatorBuilder: (context, index) => SizedBox(height: 10),
+        itemCount: controller.posts.length,
+      );
+    });
   }
 }

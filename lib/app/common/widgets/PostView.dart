@@ -1,10 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:only_u/app/data/constants.dart';
+import 'package:only_u/app/data/models/post_model.dart';
 
 class PostView extends StatefulWidget {
-  const PostView({super.key});
+  const PostView({super.key, required this.post});
+
+  final PostModel post;
 
   @override
   State<PostView> createState() => _PostViewState();
@@ -77,9 +79,7 @@ class _PostViewState extends State<PostView> {
     return SizedBox(
       height: 240,
       width: double.infinity,
-      child: Image.network(
-        'https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg',
-      ),
+      child: Image.network(widget.post.media.first.url, fit: BoxFit.cover),
     );
   }
 
@@ -101,7 +101,7 @@ class _PostViewState extends State<PostView> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10),
       child: Text(
-        'Adoring the beauty of this simmm’s high neck white t-shirt with gorgeous quality while welcoming spring.',
+        widget.post.description,
         style: TextStyle(
           color: Colors.white,
           fontSize: 14,
@@ -133,7 +133,7 @@ class _PostViewState extends State<PostView> {
           SvgPicture.asset('assets/imgs/like_white.svg'),
           SizedBox(width: 5),
           Text(
-            '4567',
+            "${widget.post.likesCount}",
             style: TextStyle(
               fontSize: 12,
               fontFamily: 'Rubik',
@@ -144,7 +144,7 @@ class _PostViewState extends State<PostView> {
           SvgPicture.asset('assets/imgs/comment_white.svg'),
           SizedBox(width: 5),
           Text(
-            '13',
+            "${widget.post.commentsCount}",
             style: TextStyle(
               fontSize: 12,
               fontFamily: 'Rubik',

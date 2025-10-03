@@ -5,7 +5,8 @@ const Color secondaryColor = Color(0xFFFF3181);
 
 
 //Base Url
-const String baseURl = "http://";
+const String baseURl = "https://us-central1-only-u-48058.cloudfunctions.net/api";
+const String postsLike = "/posts/like";
 
 //Text Styles
 const redHeadingStyle = TextStyle(

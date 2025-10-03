@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:only_u/app/data/constants.dart';
 
-class HttpClient {
+class HttpRider {
   var dio = Dio(
     BaseOptions(
       followRedirects: true,
