@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 //Colors
 const Color secondaryColor = Color(0xFFFF3181);
 
+
+//Base Url
+const String baseURl = "http://";
+
 //Text Styles
 const redHeadingStyle = TextStyle(
   fontSize: 26,
