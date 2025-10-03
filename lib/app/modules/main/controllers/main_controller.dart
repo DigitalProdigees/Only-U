@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:only_u/app/data/constants.dart';
 import 'package:only_u/app/services/auth_service.dart';
 import 'package:only_u/app/services/posts_service.dart';
 
@@ -10,6 +11,7 @@ class MainController extends GetxController {
   var caroselIndex = 0.obs;
   var posts = [].obs;
   var currentPostsPage = 1;
+  var currentCategoryId = categories[0]['id']!.toString();
   final List<String> caroselImages = [
     'https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg',
     'https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg',
@@ -27,6 +29,7 @@ class MainController extends GetxController {
       limit: 10,
       // userId: authService.currentUser?.uid ?? '',
       userId: 'user1235',
+      categoryId: currentCategoryId,
     );
     if (resp.Status == "success") {
       debugPrint("Posts loaded successfully: ${resp.Data}");

@@ -2,18 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:only_u/app/common/repository/http_client.dart';
 import 'package:only_u/app/data/models/api_response_model.dart';
 
-class PostsService {
-  Future<ApiResponse> getPosts({
-    required int page,
-    required int limit,
-    required String userId,
-    String? categoryId = "F8v8wV5ZeiVgIM2Hqjbh",
-  }) async {
+class CategoriesService {
+  Future<ApiResponse> getCategories() async {
     try {
-      final resp = await HttpRider().mainGetRoute(
-        "/posts/category/$categoryId?limit=$limit&page=$page&userId=$userId",
-        // "/posts?page=$page&limit=$limit&userId=$userId",
-      );
+      final resp = await HttpRider().mainGetRoute("/categories/");
 
       if (resp == null || resp.isEmpty) {
         return ApiResponse(
@@ -22,7 +14,7 @@ class PostsService {
           Message: "No data received from server",
         );
       }
-      debugPrint("PostsService Response: $resp");
+      debugPrint("Get Categories Response: $resp");
 
       return ApiResponse.fromJson(resp);
     } catch (e) {

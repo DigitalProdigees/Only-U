@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:only_u/app/common/widgets/PostView.dart';
+import 'package:only_u/app/data/constants.dart';
 import 'package:only_u/app/data/models/post_model.dart';
 import '../controllers/main_controller.dart';
 
@@ -105,48 +106,60 @@ class MainView extends GetView<MainController> {
       height: 42, // Set a fixed height for the horizontal ListView
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) =>
-            _buildCategoryIndividualView(index, 'Woman'),
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return SvgPicture.asset(
+              'assets/imgs/category_menu.svg',
+              height: 40,
+            );
+          }
+
+         return _buildCategoryIndividualView(categories[index -1]);
+        },
         separatorBuilder: (context, index) => Container(width: 5),
-        itemCount: 10,
+        itemCount: categories.length + 1, // +1 for the menu icon
       ),
     );
   }
 
-  Widget _buildCategoryIndividualView(int index, String categoryName) {
-    if (index == 0) {
-      return SvgPicture.asset('assets/imgs/category_menu.svg', height: 40);
-    }
-
-    return Container(
-      width: 85,
-      height: 40,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-      decoration: ShapeDecoration(
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            width: 1,
-            strokeAlign: BorderSide.strokeAlignOutside,
-            color: Colors.white.withOpacity(0.10000000149011612),
-          ),
-          borderRadius: BorderRadius.circular(50),
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            'Woman',
-            style: TextStyle(
-              color: Color(0xFFE7F6FF),
-              fontSize: 14,
-              fontFamily: 'Rubik',
-              height: 0,
+  Widget _buildCategoryIndividualView(dynamic category) {
+    return InkWell(
+      onTap: () {
+        controller.currentPostsPage = 1;
+        controller.posts.clear();
+        controller.currentCategoryId = category['id'] as String;
+        controller.loadPosts();
+      },
+      child: Container(
+        width: 85,
+        height: 40,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+        decoration: ShapeDecoration(
+          shape: RoundedRectangleBorder(
+            side: BorderSide(
+              width: 1,
+              strokeAlign: BorderSide.strokeAlignOutside,
+              color: Colors.white.withOpacity(0.10000000149011612),
             ),
+            borderRadius: BorderRadius.circular(50),
           ),
-        ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              category['name'] as String,
+              style: TextStyle(
+                color: Color(0xFFE7F6FF),
+                fontSize: 14,
+                fontFamily: 'Rubik',
+                height: 0,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
