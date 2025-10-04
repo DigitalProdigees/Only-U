@@ -2,17 +2,81 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:only_u/app/data/constants.dart';
 import 'package:only_u/app/data/models/post_model.dart';
+import 'package:only_u/app/services/posts_service.dart';
 
 class PostView extends StatefulWidget {
-  const PostView({super.key, required this.post});
+  PostView({super.key, required this.post});
 
-  final PostModel post;
+  PostModel post;
 
   @override
   State<PostView> createState() => _PostViewState();
 }
 
 class _PostViewState extends State<PostView> {
+  var isLiked = false;
+  var likesCount = 0;
+  var commentsCount = 0;
+
+  void checkStatus() {
+    setState(() {
+      isLiked = widget.post.isLiked;
+      likesCount = widget.post.likesCount;
+      commentsCount = widget.post.commentsCount;
+    });
+  }
+
+  Future<void> onLikeButtonPressed() async {
+    try {
+      setState(() {
+        if (isLiked) {
+          isLiked = false;
+          likesCount -= 1;
+        } else {
+          isLiked = true;
+          likesCount += 1;
+        }
+      });
+
+      // Call the likePost API here and handle the response if needed
+      final response = await PostsService().likePost(
+        postId: widget.post.id,
+        userId: 'user1235',
+      );
+      if (response.Status != "success") {
+        // If the API call fails, revert the like status and count
+        setState(() {
+          if (isLiked) {
+            isLiked = false;
+            likesCount -= 1;
+          } else {
+            isLiked = true;
+            likesCount += 1;
+          }
+        });
+      }
+      setState(() {
+        likesCount = response.Data['likesCount'] ?? likesCount;
+      });
+    } catch (e) {
+      setState(() {
+        if (isLiked) {
+          isLiked = false;
+          likesCount -= 1;
+        } else {
+          isLiked = true;
+          likesCount += 1;
+        }
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    checkStatus();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -130,10 +194,17 @@ class _PostViewState extends State<PostView> {
       margin: EdgeInsets.symmetric(horizontal: 10),
       child: Row(
         children: [
-          SvgPicture.asset('assets/imgs/like_white.svg'),
+          GestureDetector(
+            onTap: onLikeButtonPressed,
+            child: SvgPicture.asset(
+              isLiked
+                  ? 'assets/imgs/like_white_dense.svg'
+                  : 'assets/imgs/like_white.svg',
+            ),
+          ),
           SizedBox(width: 5),
           Text(
-            "${widget.post.likesCount}",
+            "$likesCount",
             style: TextStyle(
               fontSize: 12,
               fontFamily: 'Rubik',

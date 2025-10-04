@@ -33,4 +33,34 @@ class PostsService {
       );
     }
   }
+
+  Future<ApiResponse> likePost({
+    required String postId,
+    required String userId,
+  }) async {
+    try {
+      final resp = await HttpRider().mainPostRoute("/posts/like", {
+        "postId": postId,
+        "userId": userId,
+      });
+
+      if (resp == null || resp.isEmpty) {
+        return ApiResponse(
+          Status: "error",
+          Code: 500,
+          Message: "No data received from server",
+        );
+      }
+      debugPrint("Like Post Response: $resp");
+
+      return ApiResponse.fromJson(resp);
+    } catch (e) {
+      debugPrint("likePost error: $e");
+      return ApiResponse(
+        Status: "error",
+        Code: 500,
+        Message: "Error liking post: ${e.toString()}",
+      );
+    }
+  }
 }

@@ -395,8 +395,8 @@ class MainView extends GetView<MainController> {
           final post = PostModel.fromJson(controller.posts[index]);
           if (index == controller.posts.length - 1) {
             // Load more posts when reaching the end of the list
-            controller.currentPostsPage += 1;
-            controller.loadPosts();
+            // controller.currentPostsPage += 1;
+            // controller.loadPosts();
           }
           return PostView(post: post);
         },
