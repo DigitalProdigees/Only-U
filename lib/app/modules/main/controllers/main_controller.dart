@@ -27,8 +27,7 @@ class MainController extends GetxController {
     final resp = await PostsService().getPosts(
       page: currentPostsPage,
       limit: 10,
-      // userId: authService.currentUser?.uid ?? '',
-      userId: 'user1235',
+      userId: authService.currentUser?.uid ?? '',
       categoryId: currentCategoryId,
     );
     if (resp.Status == "success") {

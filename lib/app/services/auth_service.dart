@@ -40,4 +40,7 @@ class AuthService {
 
   // Stream to check auth state
   Stream<User?> get authState => _auth.authStateChanges();
+
+  // Get current user
+  User? get currentUser => _auth.currentUser;
 }

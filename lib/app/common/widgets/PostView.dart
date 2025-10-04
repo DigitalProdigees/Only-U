@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:only_u/app/data/constants.dart';
 import 'package:only_u/app/data/models/post_model.dart';
+import 'package:only_u/app/services/auth_service.dart';
 import 'package:only_u/app/services/posts_service.dart';
 
 class PostView extends StatefulWidget {
@@ -14,6 +15,7 @@ class PostView extends StatefulWidget {
 }
 
 class _PostViewState extends State<PostView> {
+  final AuthService authService = AuthService();
   var isLiked = false;
   var likesCount = 0;
   var commentsCount = 0;
@@ -41,32 +43,27 @@ class _PostViewState extends State<PostView> {
       // Call the likePost API here and handle the response if needed
       final response = await PostsService().likePost(
         postId: widget.post.id,
-        userId: 'user1235',
+        userId: authService.currentUser!.uid,
       );
       if (response.Status != "success") {
         // If the API call fails, revert the like status and count
         setState(() {
           if (isLiked) {
             isLiked = false;
-            likesCount -= 1;
           } else {
             isLiked = true;
-            likesCount += 1;
           }
+          likesCount = widget.post.likesCount;
+        });
+      } else {
+        setState(() {
+          likesCount = response.Data['likesCount'] ?? likesCount;
         });
       }
-      setState(() {
-        likesCount = response.Data['likesCount'] ?? likesCount;
-      });
     } catch (e) {
       setState(() {
-        if (isLiked) {
-          isLiked = false;
-          likesCount -= 1;
-        } else {
-          isLiked = true;
-          likesCount += 1;
-        }
+        isLiked = false;
+        likesCount = widget.post.likesCount;
       });
     }
   }
