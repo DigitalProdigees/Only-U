@@ -59,42 +59,51 @@ class PostModel {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'userId': userId,
-        'categoryId': categoryId,
-        'description': description,
-        'media': media.map((item) => item.toJson()).toList(),
-        'tags': tags,
-        'mentions': mentions,
-        'location': location,
-        'likesCount': likesCount,
-        'commentsCount': commentsCount,
-        'sharesCount': sharesCount,
-        'privacy': privacy,
-        'status': status,
-        'createdAt': createdAt.toJson(),
-        'updatedAt': updatedAt.toJson(),
-        'isLiked': isLiked,
-      };
+    'id': id,
+    'userId': userId,
+    'categoryId': categoryId,
+    'description': description,
+    'media': media.map((item) => item.toJson()).toList(),
+    'tags': tags,
+    'mentions': mentions,
+    'location': location,
+    'likesCount': likesCount,
+    'commentsCount': commentsCount,
+    'sharesCount': sharesCount,
+    'privacy': privacy,
+    'status': status,
+    'createdAt': createdAt.toJson(),
+    'updatedAt': updatedAt.toJson(),
+    'isLiked': isLiked,
+  };
 }
 
 class MediaItem {
   final String type;
   final String url;
+  final String? thumbnailUrl; // Optional thumbnail URL for videos
+  final int? duration; // Optional duration for videos in seconds
+  final double? aspectRatio; // Optional aspect ratio for videos
 
-  MediaItem({required this.type, required this.url});
+  MediaItem({
+    required this.type,
+    required this.url,
+    this.thumbnailUrl,
+    this.duration,
+    this.aspectRatio,
+  });
 
   factory MediaItem.fromJson(Map<String, dynamic> json) {
     return MediaItem(
       type: json['type'],
       url: json['url'],
+      thumbnailUrl: json['thumbnailURL'],
+      duration: json['duration'],
+      aspectRatio: json['aspectRatio'],
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        'type': type,
-        'url': url,
-      };
+  Map<String, dynamic> toJson() => {'type': type, 'url': url};
 }
 
 class Timestamp {
@@ -111,7 +120,7 @@ class Timestamp {
   }
 
   Map<String, dynamic> toJson() => {
-        '_seconds': seconds,
-        '_nanoseconds': nanoseconds,
-      };
+    '_seconds': seconds,
+    '_nanoseconds': nanoseconds,
+  };
 }

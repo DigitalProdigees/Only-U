@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:only_u/app/common/widgets/VideoPlayer.dart';
 import 'package:only_u/app/data/constants.dart';
 import 'package:only_u/app/data/models/post_model.dart';
 import 'package:only_u/app/services/auth_service.dart';
@@ -90,7 +92,13 @@ class _PostViewState extends State<PostView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildUpperRow(),
-          _buildImageView(),
+          widget.post.media.first.type == 'video'
+              ? _buildVideoThumbnainlView()
+              // ? VideoPost(
+              //     videoUrl: widget.post.media.first.url,
+              //     aspectRatio: widget.post.media.first.aspectRatio ?? 16 / 9,
+              //   )
+              : _buildImageView(),
           _buildUserNameTv(),
           SizedBox(height: 5),
           _buildDescriptionTv(),
@@ -141,6 +149,46 @@ class _PostViewState extends State<PostView> {
       height: 240,
       width: double.infinity,
       child: Image.network(widget.post.media.first.url, fit: BoxFit.cover),
+    );
+  }
+
+  Widget _buildVideoThumbnainlView() {
+    return SizedBox(
+      height: 240,
+      width: double.infinity,
+      child: Stack(
+        children: [
+          Image.network(
+            widget.post.media.first.thumbnailUrl ?? '',
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: 240,
+          ),
+          Center(
+            child: Container(
+              height: 50,
+              width: 50,
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.5),
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                onPressed: () {
+                  // Handle play button press
+                  Get.to(
+                    () => VideoPlayerPage(
+                      videoUrl: widget.post.media.first.url,
+                      aspectRatio: widget.post.media.first.aspectRatio!,
+                      description: widget.post.description,
+                    ),
+                  );
+                },
+                icon: Icon(Icons.play_arrow, color: Colors.white, size: 30),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
