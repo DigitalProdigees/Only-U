@@ -8,9 +8,10 @@ import 'package:only_u/app/services/auth_service.dart';
 import 'package:only_u/app/services/posts_service.dart';
 
 class PostView extends StatefulWidget {
-  PostView({super.key, required this.post});
+  PostView({super.key, required this.post, this.onUserNameTap});
 
   PostModel post;
+  final VoidCallback? onUserNameTap;
 
   @override
   State<PostView> createState() => _PostViewState();
@@ -124,13 +125,7 @@ class _PostViewState extends State<PostView> {
           SizedBox(
             // width: double.infinity,
             child: GestureDetector(
-              onTap: () {
-                // Navigate to user profile page
-                Get.toNamed(
-                  '/other-user-profile',
-                  arguments: {'userId': widget.post.userId},
-                );
-              },
+              onTap: widget.onUserNameTap,
               child: Text(
                 'Brooklyn Simmons',
                 style: TextStyle(

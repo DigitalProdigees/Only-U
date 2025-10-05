@@ -11,6 +11,8 @@ class OtherUserProfileView extends GetView<OtherUserProfileController> {
   OtherUserProfileView({super.key});
   final String userId = Get.arguments['userId'];
 
+  
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(

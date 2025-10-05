@@ -6,10 +6,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:only_u/app/common/widgets/PostView.dart';
 import 'package:only_u/app/data/constants.dart';
 import 'package:only_u/app/data/models/post_model.dart';
+import 'package:only_u/app/modules/otherUserProfile/controllers/other_user_profile_controller.dart';
 import '../controllers/main_controller.dart';
 
 class MainView extends GetView<MainController> {
-  const MainView({super.key});
+  MainView({super.key});
+
+  final otherUSerProfileController = Get.put(OtherUserProfileController());
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -400,7 +404,18 @@ class MainView extends GetView<MainController> {
             // controller.currentPostsPage += 1;
             // controller.loadPosts();
           }
-          return PostView(post: post);
+          return PostView(
+            post: post,
+            onUserNameTap: () {
+              // Navigate to user profile page
+              otherUSerProfileController.otherUserId = post.userId;
+              otherUSerProfileController.checkFollowingStatus();
+              Get.toNamed(
+                '/other-user-profile',
+                arguments: {'userId': post.userId},
+              );
+            },
+          );
         },
         separatorBuilder: (context, index) => SizedBox(height: 10),
         itemCount: controller.posts.length,

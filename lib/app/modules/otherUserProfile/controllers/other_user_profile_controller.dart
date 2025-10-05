@@ -7,6 +7,7 @@ class OtherUserProfileController extends GetxController {
   var followers = 0.obs;
   var postsCount = 13.obs;
   var following = 0.obs;
+  var otherUserId = "";
 
   @override
   void onInit() {
@@ -25,6 +26,20 @@ class OtherUserProfileController extends GetxController {
     } else {
       // Handle error (e.g., show an error message)
       debugPrint("Error following user: ${response.Message}");
+    }
+  }
+
+  Future<void> checkFollowingStatus() async {
+    final response = await UserService().checkUserFollowinStatus(
+      followingUserId: otherUserId,
+    );
+    if (response.Status == "success") {
+      // Handle success (e.g., update UI, show a message)
+      debugPrint("Successfully fetched following status.");
+      isFollowing.value = response.Data['isFollowing'] ?? false;
+    } else {
+      // Handle error (e.g., show an error message)
+      debugPrint("Error fetching following status: ${response.Message}");
     }
   }
 }

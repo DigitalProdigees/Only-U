@@ -31,4 +31,32 @@ class UserService {
       );
     }
   }
+
+  Future<ApiResponse> checkUserFollowinStatus({
+    required String followingUserId,
+  }) async {
+    final currentUserId = FirebaseAuth.instance.currentUser?.uid;
+    try {
+      final resp = await HttpRider().mainGetRoute(
+        "/users/checkFollowStatus?followerId=$currentUserId&followingId=$followingUserId",
+      );
+
+      if (resp == null || resp.isEmpty) {
+        return ApiResponse(
+          Status: "error",
+          Code: 500,
+          Message: "No data received from server",
+        );
+      }
+      debugPrint("Check User Follow Status Response: $resp");
+
+      return ApiResponse.fromJson(resp);
+    } catch (e) {
+      return ApiResponse(
+        Status: "error",
+        Code: 500,
+        Message: "Error checking user following status: ${e.toString()}",
+      );
+    }
+  }
 }
