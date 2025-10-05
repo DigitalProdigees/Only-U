@@ -6,6 +6,7 @@ import 'package:only_u/app/data/constants.dart';
 import 'package:only_u/app/data/models/post_model.dart';
 import 'package:only_u/app/services/auth_service.dart';
 import 'package:only_u/app/services/posts_service.dart';
+import 'package:share_plus/share_plus.dart';
 
 class PostView extends StatefulWidget {
   PostView({super.key, required this.post, this.onUserNameTap});
@@ -69,6 +70,15 @@ class _PostViewState extends State<PostView> {
         likesCount = widget.post.likesCount;
       });
     }
+  }
+
+  void onShareButtonPressed() {
+    SharePlus.instance.share(
+      ShareParams(
+        text:
+            'Check out this post: ${widget.post.description} download the app at https://example.com',
+      ),
+    );
   }
 
   @override
@@ -272,7 +282,10 @@ class _PostViewState extends State<PostView> {
             ),
           ),
           Spacer(),
-          SvgPicture.asset('assets/imgs/send_white.svg'),
+          GestureDetector(
+            onTap: onShareButtonPressed,
+            child: SvgPicture.asset('assets/imgs/send_white.svg'),
+          ),
         ],
       ),
     );
