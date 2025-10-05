@@ -48,7 +48,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.OTHER_USER_PROFILE,
-      page: () => const OtherUserProfileView(),
+      page: () =>  OtherUserProfileView(),
       binding: OtherUserProfileBinding(),
     ),
   ];

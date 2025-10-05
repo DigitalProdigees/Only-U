@@ -1,23 +1,30 @@
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:only_u/app/services/user_service.dart';
 
 class OtherUserProfileController extends GetxController {
-  //TODO: Implement OtherUserProfileController
+  var isFollowing = false.obs;
+  var followers = 0.obs;
+  var postsCount = 13.obs;
+  var following = 0.obs;
 
-  final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
+  Future<void> followUser({required String followingId}) async {
+    final response = await UserService().followOtherUser(
+      followingId: followingId,
+    );
+    if (response.Status == "success") {
+      // Handle success (e.g., update UI, show a message)
+      debugPrint("Successfully followed the user.");
+      isFollowing.value = response.Data['followed'] ?? true;
+      followers.value = response.Data['followersCount'] ?? followers.value;
+    } else {
+      // Handle error (e.g., show an error message)
+      debugPrint("Error following user: ${response.Message}");
+    }
   }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
 }

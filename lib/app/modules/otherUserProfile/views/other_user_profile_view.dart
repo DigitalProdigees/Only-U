@@ -8,7 +8,9 @@ import 'package:only_u/app/data/constants.dart';
 import '../controllers/other_user_profile_controller.dart';
 
 class OtherUserProfileView extends GetView<OtherUserProfileController> {
-  const OtherUserProfileView({super.key});
+  OtherUserProfileView({super.key});
+  final String userId = Get.arguments['userId'];
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -95,14 +97,16 @@ class OtherUserProfileView extends GetView<OtherUserProfileController> {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Text(
-                      '0',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Color(0xFFFF3081),
-                        fontSize: 18,
-                        fontFamily: 'Rubik',
-                        height: 0,
+                    Obx(
+                      () => Text(
+                        controller.postsCount.value.toString(),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Color(0xFFFF3081),
+                          fontSize: 18,
+                          fontFamily: 'Rubik',
+                          height: 0,
+                        ),
                       ),
                     ),
                   ],
@@ -124,37 +128,38 @@ class OtherUserProfileView extends GetView<OtherUserProfileController> {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Text(
-                      '0',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Color(0xFFFF3081),
-                        fontSize: 18,
-                        fontFamily: 'Rubik',
-                        height: 0,
+                    Obx(
+                      () => Text(
+                        controller.followers.value.toString(),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Color(0xFFFF3081),
+                          fontSize: 18,
+                          fontFamily: 'Rubik',
+                          height: 0,
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
               const SizedBox(width: 8),
-              Container(
-                // width: 75.67,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Following',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.rubik(
-                        textStyle: TextStyle(color: Colors.white, fontSize: 14),
-                      ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Following',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.rubik(
+                      textStyle: TextStyle(color: Colors.white, fontSize: 14),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '0',
+                  ),
+                  const SizedBox(height: 4),
+                  Obx(
+                    () => Text(
+                      controller.following.value.toString(),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Color(0xFFFF3081),
@@ -163,8 +168,8 @@ class OtherUserProfileView extends GetView<OtherUserProfileController> {
                         height: 0,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -208,7 +213,14 @@ class OtherUserProfileView extends GetView<OtherUserProfileController> {
           height: 42,
           child: SvgPicture.asset('assets/imgs/message.svg'),
         ),
-        FollowFollowingButton(),
+        Obx(
+          () => FollowFollowingButton(
+            isFollowing: controller.isFollowing.value,
+            onTap: () {
+              controller.followUser(followingId: userId);
+            },
+          ),
+        ),
       ],
     );
   }
@@ -218,25 +230,17 @@ class OtherUserProfileView extends GetView<OtherUserProfileController> {
   }
 }
 
-class FollowFollowingButton extends StatefulWidget {
-  const FollowFollowingButton({super.key});
+class FollowFollowingButton extends StatelessWidget {
+  FollowFollowingButton({super.key, this.isFollowing = false, this.onTap});
 
-  @override
-  State<FollowFollowingButton> createState() => _FollowFollowingButtonState();
-}
-
-class _FollowFollowingButtonState extends State<FollowFollowingButton> {
-  bool following = false;
+  void Function()? onTap;
+  bool isFollowing;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          following = !following;
-        });
-      },
-      child: following
+      onTap: onTap,
+      child: isFollowing
           ? DoneFollowing()
           : SizedBox(
               height: 50,
@@ -306,9 +310,7 @@ class ThreeColumnGrid extends StatelessWidget {
     'https://images.pexels.com/photos/2169434/pexels-photo-2169434.jpeg',
     'https://images.pexels.com/photos/2613260/pexels-photo-2613260.jpeg',
     'https://images.pexels.com/photos/2744193/pexels-photo-2744193.jpeg',
-    'https://images.pexels.com/photos/732425/pexels-photo-732425.jpeg'
-
-    
+    'https://images.pexels.com/photos/732425/pexels-photo-732425.jpeg',
   ];
 
   @override

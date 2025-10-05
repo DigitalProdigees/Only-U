@@ -17,7 +17,7 @@ class HttpRider {
     return resp.data;
   }
 
-  Future<Map<String, dynamic>> mainPostRoute(String route, dynamic data) async {
+  Future<Map<String, dynamic>?> mainPostRoute(String route, dynamic data) async {
     debugPrint("📤 Request URL: $baseURl$route");
     debugPrint("📤 Request Body: $data");
 
