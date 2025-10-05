@@ -123,12 +123,21 @@ class _PostViewState extends State<PostView> {
           ),
           SizedBox(
             // width: double.infinity,
-            child: Text(
-              'Brooklyn Simmons',
-              style: TextStyle(
-                color: Color(0xFFFFF7FA),
-                fontSize: 16,
-                fontFamily: 'Rubik',
+            child: GestureDetector(
+              onTap: () {
+                // Navigate to user profile page
+                Get.toNamed(
+                  '/other-user-profile',
+                  arguments: {'userId': widget.post.userId},
+                );
+              },
+              child: Text(
+                'Brooklyn Simmons',
+                style: TextStyle(
+                  color: Color(0xFFFFF7FA),
+                  fontSize: 16,
+                  fontFamily: 'Rubik',
+                ),
               ),
             ),
           ),
