@@ -37,6 +37,9 @@ class SignupView extends GetView<SignupController> {
                 SizedBox(height: 10),
                 _buildSignInWithEmailTV(),
                 SizedBox(height: 10),
+                _buildLabel('Full Nmae'),
+                SizedBox(height: 10),
+                _buildNameField(),
                 _buildLabel('Email'),
                 SizedBox(height: 10),
                 _buildEmailField(),
@@ -87,6 +90,13 @@ class SignupView extends GetView<SignupController> {
           fontFamily: 'Rubik',
         ),
       ),
+    );
+  }
+
+  Widget _buildNameField() {
+    return Custominputfield(
+      hintText: 'e.g John',
+      controller: controller.nameController,
     );
   }
 

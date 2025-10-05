@@ -7,6 +7,7 @@ import 'package:only_u/app/services/posts_service.dart';
 class MainController extends GetxController {
   var isLoading = false.obs;
   final AuthService authService = AuthService();
+  var currentUserProfile = {}.obs;
   var tabIndex = 0.obs;
   var caroselIndex = 0.obs;
   var posts = [].obs;
@@ -20,6 +21,7 @@ class MainController extends GetxController {
 
   void onInit() {
     loadPosts();
+    loadCurrentUserProfile();
     super.onInit();
   }
 
@@ -31,10 +33,17 @@ class MainController extends GetxController {
       categoryId: currentCategoryId,
     );
     if (resp.Status == "success") {
-      debugPrint("Posts loaded successfully: ${resp.Data}");
+      debugPrint("Posts loaded successfully:");
       posts.addAll(resp.Data);
     } else {
       debugPrint("Error loading posts: ${resp.Message}");
+    }
+  }
+
+  void loadCurrentUserProfile() async {
+    final profile = await AuthService().getCurrentUserProfile();
+    if (profile != null) {
+      currentUserProfile.value = profile;
     }
   }
 

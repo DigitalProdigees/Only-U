@@ -7,8 +7,9 @@ class SignupController extends GetxController {
   var isLoading = false.obs;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final AuthService authService = AuthService();
+  final TextEditingController nameController = TextEditingController();
 
+  final AuthService authService = AuthService();
 
   void updateTermsAndConditionsValue(bool v) {
     termsAndConditionsChecked.value = v;
@@ -17,9 +18,10 @@ class SignupController extends GetxController {
   void signUp() async {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
+    String name = nameController.text.trim();
 
-    if (email.isEmpty || password.isEmpty) {
-      Get.snackbar("Error", "Email and Password cannot be empty");
+    if (email.isEmpty || password.isEmpty || name.isEmpty) {
+      Get.snackbar("Error", "Name, Email and Password cannot be empty");
       return;
     }
 
@@ -29,7 +31,7 @@ class SignupController extends GetxController {
     }
     isLoading.value = true;
 
-    var user = await authService.signUp(email, password);
+    var user = await authService.signUp(email, password, name);
     if (user != null) {
       Get.snackbar("Success", "Account created successfully");
       // Navigate to home or dashboard

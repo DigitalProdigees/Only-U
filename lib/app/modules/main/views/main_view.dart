@@ -60,14 +60,16 @@ class MainView extends GetView<MainController> {
                 textStyle: TextStyle(color: Color(0xFFFF3080), fontSize: 24),
               ),
             ),
-            Text(
-              'M Shafique',
-              style: GoogleFonts.rubik(
-                textStyle: TextStyle(
-                  color: Color(0xFFE7F6FF),
-                  fontSize: 18,
-                  fontFamily: 'Rubik',
-                  height: 0,
+            Obx(
+              () => Text(
+                "${controller.currentUserProfile['name'].toString().split(' ').first ?? "Name"}",
+                style: GoogleFonts.rubik(
+                  textStyle: TextStyle(
+                    color: Color(0xFFE7F6FF),
+                    fontSize: 18,
+                    fontFamily: 'Rubik',
+                    height: 0,
+                  ),
                 ),
               ),
             ),
@@ -114,7 +116,7 @@ class MainView extends GetView<MainController> {
             );
           }
 
-         return _buildCategoryIndividualView(categories[index -1]);
+          return _buildCategoryIndividualView(categories[index - 1]);
         },
         separatorBuilder: (context, index) => Container(width: 5),
         itemCount: categories.length + 1, // +1 for the menu icon
