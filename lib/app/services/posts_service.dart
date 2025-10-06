@@ -63,4 +63,36 @@ class PostsService {
       );
     }
   }
+
+  Future<ApiResponse> addCommentPost({
+    required String postId,
+    required String userId,
+    required String comment,
+  }) async {
+    try {
+      final resp = await HttpRider().mainPostRoute("/posts/comment/add", {
+        "postId": postId,
+        "userId": userId,
+        "text": comment,
+      });
+
+      if (resp == null || resp.isEmpty) {
+        return ApiResponse(
+          Status: "error",
+          Code: 500,
+          Message: "No data received from server",
+        );
+      }
+      debugPrint("Commenting Post Response: $resp");
+
+      return ApiResponse.fromJson(resp);
+    } catch (e) {
+      debugPrint("Commenting Post Response:  error: $e");
+      return ApiResponse(
+        Status: "error",
+        Code: 500,
+        Message: "Commenting Post Response: ${e.toString()}",
+      );
+    }
+  }
 }

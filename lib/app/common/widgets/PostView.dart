@@ -81,6 +81,10 @@ class _PostViewState extends State<PostView> {
     );
   }
 
+  void onCommentButtonPressed() {
+    showCommentBottomSheet(context);
+  }
+
   @override
   void initState() {
     checkStatus();
@@ -271,7 +275,10 @@ class _PostViewState extends State<PostView> {
             ),
           ),
           SizedBox(width: 15),
-          SvgPicture.asset('assets/imgs/comment_white.svg'),
+          GestureDetector(
+            onTap: onCommentButtonPressed,
+            child: SvgPicture.asset('assets/imgs/comment_white.svg'),
+          ),
           SizedBox(width: 5),
           Text(
             "${widget.post.commentsCount}",
@@ -286,6 +293,145 @@ class _PostViewState extends State<PostView> {
             onTap: onShareButtonPressed,
             child: SvgPicture.asset('assets/imgs/send_white.svg'),
           ),
+        ],
+      ),
+    );
+  }
+
+  void showCommentBottomSheet(BuildContext context) {
+    Get.bottomSheet(
+      CommentBottomSheet(
+        post: widget.post,
+        secondaryColor: secondaryColor,
+        onSuccess: () {
+          setState(() {
+            commentsCount += 1;
+          });
+        },
+      ),
+      isScrollControlled: true,
+    );
+  }
+
+}
+
+class CommentBottomSheet extends StatefulWidget {
+  final Color secondaryColor;
+  final VoidCallback? onSuccess;
+  final PostModel post;
+  const CommentBottomSheet({
+    required this.secondaryColor,
+    super.key,
+    required this.onSuccess,
+    required this.post,
+  });
+
+  @override
+  _CommentBottomSheetState createState() => _CommentBottomSheetState();
+}
+
+class _CommentBottomSheetState extends State<CommentBottomSheet> {
+  bool isLoading = false;
+  final TextEditingController commentController = TextEditingController();
+
+  void submitComment() async {
+    setState(() => isLoading = true);
+    final AuthService authService = AuthService();
+    final response = await PostsService().addCommentPost(
+      postId: widget.post.id,
+      userId: authService.currentUser!.uid,
+      comment: commentController.text,
+    );
+    if (response.Status == "success") {
+      widget.onSuccess?.call();
+      Get.snackbar(
+        "Success",
+        'Comment added successfully',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+    } else {
+      Get.snackbar(
+        "Error",
+        'Failed to add comment',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+
+    setState(() => isLoading = false);
+    Get.back();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.black,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Write a Comment',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontFamily: 'Rubik',
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 20),
+          TextField(
+            maxLines: 5,
+            style: TextStyle(color: Colors.white),
+            controller: commentController,
+            decoration: InputDecoration(
+              hintText: 'Type your comment here...',
+              hintStyle: TextStyle(color: Colors.white54),
+              filled: true,
+              fillColor: Colors.white12,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide.none,
+              ),
+            ),
+          ),
+          SizedBox(height: 20),
+          isLoading
+              ? Center(
+                  child: CircularProgressIndicator(
+                    color: widget.secondaryColor,
+                  ),
+                )
+              : Align(
+                  alignment: Alignment.center,
+                  child: ElevatedButton(
+                    onPressed: submitComment,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: widget.secondaryColor,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 30,
+                        vertical: 15,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text(
+                      'Submit',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontFamily: 'Rubik',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
         ],
       ),
     );

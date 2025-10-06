@@ -34,7 +34,6 @@ class MainView extends GetView<MainController> {
                 _buildCategoryHorizontListView(),
                 SizedBox(height: 20),
                 Obx(() => _buildTabView()),
-                SizedBox(height: 20),
                 SizedBox(height: 10),
                 _buildCaroselView(),
                 SizedBox(height: 20),
@@ -192,6 +191,9 @@ class MainView extends GetView<MainController> {
                   onTap: () {
                     debugPrint("My Feed tapped");
                     controller.tabIndex.value = 0;
+                    controller.currentPostsPage = 1;
+                    controller.posts.clear();
+                    controller.loadPosts();
                   },
                   child: Container(
                     height: 42,
@@ -239,6 +241,9 @@ class MainView extends GetView<MainController> {
                   onTap: () {
                     debugPrint("All tapped");
                     controller.tabIndex.value = 1;
+                    controller.currentPostsPage = 1;
+                    controller.posts.clear();
+                    controller.loadPosts();
                   },
                   child: Container(
                     height: 42,
