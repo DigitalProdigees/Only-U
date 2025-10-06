@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:only_u/app/common/widgets/VideoPlayer.dart';
 import 'package:only_u/app/data/constants.dart';
 import 'package:only_u/app/data/models/post_model.dart';
+import 'package:only_u/app/modules/main/controllers/main_controller.dart';
 import 'package:only_u/app/services/auth_service.dart';
 import 'package:only_u/app/services/posts_service.dart';
 import 'package:share_plus/share_plus.dart';
@@ -281,7 +282,7 @@ class _PostViewState extends State<PostView> {
           ),
           SizedBox(width: 5),
           Text(
-            "${widget.post.commentsCount}",
+            "$commentsCount",
             style: TextStyle(
               fontSize: 12,
               fontFamily: 'Rubik',
@@ -298,31 +299,25 @@ class _PostViewState extends State<PostView> {
     );
   }
 
-  void showCommentBottomSheet(BuildContext context) {
-    Get.bottomSheet(
-      CommentBottomSheet(
-        post: widget.post,
-        secondaryColor: secondaryColor,
-        onSuccess: () {
-          setState(() {
-            commentsCount += 1;
-          });
-        },
-      ),
+  void showCommentBottomSheet(BuildContext context) async {
+    await Get.bottomSheet(
+      CommentBottomSheet(post: widget.post, secondaryColor: secondaryColor),
       isScrollControlled: true,
     );
+    setState(() {
+      commentsCount += 1;
+    });
+    Get.snackbar('Success', 'Your Comment Added');
   }
-
 }
 
 class CommentBottomSheet extends StatefulWidget {
   final Color secondaryColor;
-  final VoidCallback? onSuccess;
+
   final PostModel post;
   const CommentBottomSheet({
     required this.secondaryColor,
     super.key,
-    required this.onSuccess,
     required this.post,
   });
 
@@ -333,7 +328,7 @@ class CommentBottomSheet extends StatefulWidget {
 class _CommentBottomSheetState extends State<CommentBottomSheet> {
   bool isLoading = false;
   final TextEditingController commentController = TextEditingController();
-
+  final MainController mainController = Get.find<MainController>();
   void submitComment() async {
     setState(() => isLoading = true);
     final AuthService authService = AuthService();
@@ -342,22 +337,13 @@ class _CommentBottomSheetState extends State<CommentBottomSheet> {
       userId: authService.currentUser!.uid,
       comment: commentController.text,
     );
-    if (response.Status == "success") {
-      widget.onSuccess?.call();
-      Get.snackbar(
-        "Success",
-        'Comment added successfully',
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-      );
-    } else {
-      Get.snackbar(
-        "Error",
-        'Failed to add comment',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-    }
+    debugPrint("Add Comment Response: $response");
+    // if (response.Status == "success") {
+    //   mainController.posts.where((p) => p['id'] == widget.post.id).forEach((p) {
+    //     p['commentsCount'] += 1;
+    //   });
+    //   mainController.update();
+    // }
 
     setState(() => isLoading = false);
     Get.back();
