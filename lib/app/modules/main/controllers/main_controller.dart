@@ -12,7 +12,7 @@ class MainController extends GetxController {
   var caroselIndex = 0.obs;
   var posts = [].obs;
   var currentPostsPage = 1;
-  var currentCategoryId = categories[0]['id']!.toString();
+  var currentCategoryId = categories[0]['id']!.toString().obs;
   final List<String> caroselImages = [
     'https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg',
     'https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg',
@@ -30,7 +30,7 @@ class MainController extends GetxController {
       page: currentPostsPage,
       limit: 10,
       userId: authService.currentUser?.uid ?? '',
-      categoryId: currentCategoryId,
+      categoryId: currentCategoryId.value,
     );
     if (resp.Status == "success") {
       debugPrint("Posts loaded successfully:");

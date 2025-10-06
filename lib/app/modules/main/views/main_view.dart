@@ -114,7 +114,7 @@ class MainView extends GetView<MainController> {
         itemBuilder: (context, index) {
           if (index == 0) {
             return SvgPicture.asset(
-              'assets/imgs/category_menu.svg',
+              'assets/imgs/cat_menu.svg',
               height: 40,
             );
           }
@@ -128,42 +128,34 @@ class MainView extends GetView<MainController> {
   }
 
   Widget _buildCategoryIndividualView(dynamic category) {
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         controller.currentPostsPage = 1;
         controller.posts.clear();
-        controller.currentCategoryId = category['id'] as String;
+        controller.currentCategoryId.value = category['id'] as String;
         controller.loadPosts();
       },
-      child: Container(
-        width: 85,
-        height: 40,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-        decoration: ShapeDecoration(
-          shape: RoundedRectangleBorder(
-            side: BorderSide(
-              width: 1,
-              strokeAlign: BorderSide.strokeAlignOutside,
-              color: Colors.white.withOpacity(0.10000000149011612),
-            ),
+      child: Obx(
+        () => Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+          decoration: BoxDecoration(
+            border: Border.all(width: 1, color: Colors.white.withOpacity(0.1)),
             borderRadius: BorderRadius.circular(50),
+            color: controller.currentCategoryId.value == category['id']
+                ? Color(0xff122C58)
+                : Colors.transparent,
           ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
+          child: Center(
+            child: Text(
               category['name'] as String,
               style: TextStyle(
                 color: Color(0xFFE7F6FF),
                 fontSize: 14,
                 fontFamily: 'Rubik',
-                height: 0,
+                height: 1.2, // Use a positive height for proper line spacing
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
