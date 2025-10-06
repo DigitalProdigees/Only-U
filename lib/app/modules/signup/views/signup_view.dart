@@ -37,6 +37,9 @@ class SignupView extends GetView<SignupController> {
                 SizedBox(height: 10),
                 _buildSignInWithEmailTV(),
                 SizedBox(height: 10),
+                _buildLabel('Full Nmae'),
+                SizedBox(height: 10),
+                _buildNameField(),
                 _buildLabel('Email'),
                 SizedBox(height: 10),
                 _buildEmailField(),
@@ -71,7 +74,7 @@ class SignupView extends GetView<SignupController> {
     return Container(
       margin: EdgeInsets.only(left: 10),
       alignment: Alignment.topLeft,
-      child: Text("Sign in with Email", style: whiteSubHeadingStyle),
+      child: Text("Sign up with Email", style: whiteSubHeadingStyle),
     );
   }
 
@@ -87,6 +90,13 @@ class SignupView extends GetView<SignupController> {
           fontFamily: 'Rubik',
         ),
       ),
+    );
+  }
+
+  Widget _buildNameField() {
+    return Custominputfield(
+      hintText: 'e.g John',
+      controller: controller.nameController,
     );
   }
 
@@ -141,7 +151,7 @@ class SignupView extends GetView<SignupController> {
               ),
             ),
             TextSpan(
-              text: "Signin Here",
+              text: "Sign in Here",
               style: TextStyle(
                 color: Color(0xFFFF3080),
                 fontSize: 14,

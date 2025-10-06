@@ -142,7 +142,7 @@ class SigninView extends GetView<SigninController> {
               ),
             ),
             TextSpan(
-              text: "Signup Here",
+              text: "Sign up Here",
               style: TextStyle(
                 color: Color(0xFFFF3080),
                 fontSize: 14,
