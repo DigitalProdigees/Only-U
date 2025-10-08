@@ -108,19 +108,24 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
             // 👈 Leading widget
             prefixIcon: Padding(
               padding: const EdgeInsets.only(left: 8, right: 4),
-              child: Container(
-                width: 32,
+              child: SizedBox(
                 height: 32,
-                decoration: ShapeDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage("https://picsum.photos/32/32"),
-                    fit: BoxFit.fill,
-                  ),
-                  shape: OvalBorder(
-                    side: BorderSide(width: 1, color: Colors.white),
-                  ),
-                ),
+                width: 32,
+                child: Image.asset('assets/imgs/avator.png'),
               ),
+              // Container(
+              //   width: 32,
+              //   height: 32,
+              //   decoration: ShapeDecoration(
+              //     image: DecorationImage(
+              //       image: NetworkImage("https://picsum.photos/32/32"),
+              //       fit: BoxFit.fill,
+              //     ),
+              //     shape: OvalBorder(
+              //       side: BorderSide(width: 1, color: Colors.white),
+              //     ),
+              //   ),
+              // ),
             ),
 
             // 👈 Trailing widget
