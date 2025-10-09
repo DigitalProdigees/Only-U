@@ -37,7 +37,7 @@ class SignupView extends GetView<SignupController> {
                 SizedBox(height: 10),
                 _buildSignInWithEmailTV(),
                 SizedBox(height: 10),
-                _buildLabel('Full Nmae'),
+                _buildLabel('Full Name'),
                 SizedBox(height: 10),
                 _buildNameField(),
                 _buildLabel('Email'),
