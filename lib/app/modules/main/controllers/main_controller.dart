@@ -5,6 +5,7 @@ import 'package:only_u/app/services/auth_service.dart';
 import 'package:only_u/app/services/posts_service.dart';
 
 class MainController extends GetxController {
+  var postsLoading = false.obs;
   var isLoading = false.obs;
   final AuthService authService = AuthService();
   var currentUserProfile = {}.obs;
@@ -26,6 +27,7 @@ class MainController extends GetxController {
   }
 
   Future<void> loadPosts() async {
+    postsLoading.value = true;
     final resp = await PostsService().getPosts(
       page: currentPostsPage,
       limit: 10,
@@ -38,6 +40,7 @@ class MainController extends GetxController {
     } else {
       debugPrint("Error loading posts: ${resp.Message}");
     }
+    postsLoading.value = false;
   }
 
   void loadCurrentUserProfile() async {
