@@ -51,39 +51,35 @@ class MainView extends GetView<MainController> {
 
   Widget _buildAppBar() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Hello ,',
-              style: GoogleFonts.oleoScript(
-                textStyle: TextStyle(
-                  color: Color(0xFFFF3080),
-                  fontSize: 24,
-                  shadows: [
-                    Shadow(
-                      offset: Offset(1.0, 1.0),
-                      blurRadius: 2.0,
-                      color: Colors.white,
-                    ),
-                  ],
+        Text(
+          'Hello ,',
+          style: GoogleFonts.oleoScript(
+            textStyle: TextStyle(
+              color: Color(0xFFFF3080),
+              fontSize: 24,
+              shadows: [
+                Shadow(
+                  offset: Offset(1.0, 1.0),
+                  blurRadius: 2.0,
+                  color: Colors.white,
                 ),
-              ),
+              ],
             ),
-            Obx(
-              () => Text(
-                "${controller.currentUserProfile['name'].toString().split(' ').first}",
-                style: GoogleFonts.rubik(
-                  textStyle: TextStyle(color: Color(0xFFE7F6FF), fontSize: 18),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
+        SizedBox(width: 10,),
+        Obx(
+          () => Text(
+            "${controller.currentUserProfile['name'].toString().split(' ').first}",
+            style: GoogleFonts.rubik(
+              textStyle: TextStyle(color: Color(0xFFE7F6FF), fontSize: 18),
+            ),
+          ),
+        ),
+        Spacer(),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [

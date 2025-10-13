@@ -1,13 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:only_u/app/common/widgets/CommentsBottomSheet.dart';
+import 'package:only_u/app/common/widgets/LoadingView.dart';
 import 'package:only_u/app/common/widgets/VideoPlayer.dart';
 import 'package:only_u/app/data/constants.dart';
 import 'package:only_u/app/data/models/post_model.dart';
 import 'package:only_u/app/services/auth_service.dart';
 import 'package:only_u/app/services/posts_service.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shimmer/shimmer.dart';
 
 class PostView extends StatefulWidget {
   PostView({super.key, required this.post, this.onUserNameTap});
@@ -91,8 +94,6 @@ class _PostViewState extends State<PostView> {
     );
   }
 
- 
-
   @override
   void initState() {
     checkStatus();
@@ -116,7 +117,7 @@ class _PostViewState extends State<PostView> {
         children: [
           _buildUpperRow(),
           widget.post.media.first.type == 'video'
-              ? _buildVideoThumbnainlView()
+              ? _buildVideoThumbnailView()
               // ? VideoPost(
               //     videoUrl: widget.post.media.first.url,
               //     aspectRatio: widget.post.media.first.aspectRatio ?? 16 / 9,
@@ -174,49 +175,71 @@ class _PostViewState extends State<PostView> {
     return SizedBox(
       height: 240,
       width: double.infinity,
-      child: Image.network(widget.post.media.first.url, fit: BoxFit.cover),
-    );
-  }
-
-  Widget _buildVideoThumbnainlView() {
-    return SizedBox(
-      height: 240,
-      width: double.infinity,
-      child: Stack(
-        children: [
-          Image.network(
-            widget.post.media.first.thumbnailUrl ?? '',
-            fit: BoxFit.cover,
+      child: CachedNetworkImage(
+        imageUrl: widget.post.media.first.url,
+        placeholder: (context, url) => Shimmer.fromColors(
+          baseColor: Colors.grey.shade300,
+          highlightColor: Colors.grey.shade100,
+          child: Container(
             width: double.infinity,
             height: 240,
+            color: Colors.white,
           ),
-          Center(
-            child: Container(
-              height: 50,
-              width: 50,
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.5),
-                shape: BoxShape.circle,
-              ),
-              child: IconButton(
-                onPressed: () {
-                  // Handle play button press
-                  Get.to(
-                    () => VideoPlayerPage(
-                      videoUrl: widget.post.media.first.url,
-                      aspectRatio: widget.post.media.first.aspectRatio!,
-                      description: widget.post.description,
-                    ),
-                  );
-                },
-                icon: Icon(Icons.play_arrow, color: Colors.white, size: 30),
-              ),
-            ),
-          ),
-        ],
+        ),
+        errorWidget: (context, url, error) => Icon(Icons.error),
+        fit: BoxFit.cover,
       ),
     );
   }
+
+Widget _buildVideoThumbnailView() {
+  return SizedBox(
+    height: 240,
+    width: double.infinity,
+    child: Stack(
+      children: [
+        CachedNetworkImage(
+          imageUrl: widget.post.media.first.thumbnailUrl ?? '',
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: 240,
+          placeholder: (context, url) => Shimmer.fromColors(
+            baseColor: Colors.grey.shade300,
+            highlightColor: Colors.grey.shade100,
+            child: Container(
+              width: double.infinity,
+              height: 240,
+              color: Colors.white,
+            ),
+          ),
+          errorWidget: (context, url, error) => Icon(Icons.error),
+        ),
+        Center(
+          child: Container(
+            height: 50,
+            width: 50,
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.5),
+              shape: BoxShape.circle,
+            ),
+            child: IconButton(
+              onPressed: () {
+                Get.to(
+                  () => VideoPlayerPage(
+                    videoUrl: widget.post.media.first.url,
+                    aspectRatio: widget.post.media.first.aspectRatio!,
+                    description: widget.post.description,
+                  ),
+                );
+              },
+              icon: Icon(Icons.play_arrow, color: Colors.white, size: 30),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
 
   Widget _buildUserNameTv() {
     return Container(
@@ -311,5 +334,4 @@ class _PostViewState extends State<PostView> {
       ),
     );
   }
-
 }
