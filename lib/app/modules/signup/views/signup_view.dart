@@ -84,11 +84,7 @@ class SignupView extends GetView<SignupController> {
       alignment: Alignment.topLeft,
       child: Text(
         label,
-        style: TextStyle(
-          color: Color(0xFFFFF7FA),
-          fontSize: 14,
-          fontFamily: 'Rubik',
-        ),
+        style: normalBodyStyle,
       ),
     );
   }
@@ -140,24 +136,15 @@ class SignupView extends GetView<SignupController> {
     return InkWell(
       onTap: () => Get.toNamed('/signin'),
       child: RichText(
-        text: const TextSpan(
+        text:  TextSpan(
           children: [
             TextSpan(
               text: "Already got an account? ",
-              style: TextStyle(
-                color: Color(0xFFFFF7FA),
-                fontSize: 14,
-                fontFamily: 'Rubik',
-              ),
+              style:normalBodyStyle,
             ),
             TextSpan(
               text: "Sign in Here",
-              style: TextStyle(
-                color: Color(0xFFFF3080),
-                fontSize: 14,
-                fontFamily: 'Rubik',
-                decoration: TextDecoration.underline,
-              ),
+              style: normalBodyStyle.copyWith(decoration: TextDecoration.underline,color: secondaryColor),
             ),
           ],
         ),

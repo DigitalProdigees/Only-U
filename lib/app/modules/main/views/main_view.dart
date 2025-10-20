@@ -55,27 +55,44 @@ class MainView extends GetView<MainController> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          'Hello ,',
-          style: GoogleFonts.oleoScript(
+          'Hello',
+          style: GoogleFonts.qwigley(
             textStyle: TextStyle(
-              color: Color(0xFFFF3080),
-              fontSize: 24,
+              color: Colors.white,
+              fontSize: 30,
               shadows: [
                 Shadow(
-                  offset: Offset(1.0, 1.0),
-                  blurRadius: 2.0,
-                  color: Colors.white,
+                  offset: Offset(-1.5, -1.5),
+                  blurRadius: 1,
+                  color: Colors.red,
+                ),
+                Shadow(
+                  offset: Offset(1.5, -1.5),
+                  blurRadius: 1,
+                  color: Colors.red,
+                ),
+                Shadow(
+                  offset: Offset(-1.5, 1.5),
+                  blurRadius: 1,
+                  color: Colors.red,
+                ),
+                Shadow(
+                  offset: Offset(1.5, 1.5),
+                  blurRadius: 1,
+                  color: Colors.red,
                 ),
               ],
             ),
           ),
         ),
-        SizedBox(width: 10,),
+        SizedBox(width: 10),
         Obx(
           () => Text(
-            "${controller.currentUserProfile['name'].toString().split(' ').first}",
-            style: GoogleFonts.rubik(
-              textStyle: TextStyle(color: Color(0xFFE7F6FF), fontSize: 18),
+            ", ${controller.currentUserProfile['name'].toString().split(' ').first}",
+            style: TextStyle(
+              fontFamily: 'Avenir',
+              color: Color(0xFFE7F6FF),
+              fontSize: 18,
             ),
           ),
         ),
@@ -145,12 +162,7 @@ class MainView extends GetView<MainController> {
                 : Colors.transparent,
           ),
           child: Center(
-            child: Text(
-              category['name'] as String,
-              style: GoogleFonts.rubik(
-                textStyle: TextStyle(color: Color(0xFFE7F6FF), fontSize: 14),
-              ),
-            ),
+            child: Text(category['name'] as String, style: normalBodyStyle),
           ),
         ),
       ),
@@ -212,12 +224,7 @@ class MainView extends GetView<MainController> {
                       children: [
                         Text(
                           'My feed',
-                          style: TextStyle(
-                            color: Color(0xFFFFF7FA),
-                            fontSize: 16,
-                            fontFamily: 'Rubik',
-                            height: 0,
-                          ),
+                          style: normalBodyStyle.copyWith(fontSize: 16),
                         ),
                       ],
                     ),
@@ -262,12 +269,7 @@ class MainView extends GetView<MainController> {
                       children: [
                         Text(
                           'All',
-                          style: TextStyle(
-                            color: Color(0xFFE7F6FF),
-                            fontSize: 16,
-                            fontFamily: 'Rubik',
-                            height: 0,
-                          ),
+                          style: normalBodyStyle.copyWith(fontSize: 16),
                         ),
                       ],
                     ),

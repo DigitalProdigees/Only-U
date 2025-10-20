@@ -149,14 +149,7 @@ class _PostViewState extends State<PostView> {
             // width: double.infinity,
             child: GestureDetector(
               onTap: widget.onUserNameTap,
-              child: Text(
-                'Brooklyn Simmons',
-                style: TextStyle(
-                  color: Color(0xFFFFF7FA),
-                  fontSize: 16,
-                  fontFamily: 'Rubik',
-                ),
-              ),
+              child: Text('Brooklyn Simmons', style: normalBodyStyle),
             ),
           ),
           Spacer(),
@@ -192,65 +185,61 @@ class _PostViewState extends State<PostView> {
     );
   }
 
-Widget _buildVideoThumbnailView() {
-  return SizedBox(
-    height: 240,
-    width: double.infinity,
-    child: Stack(
-      children: [
-        CachedNetworkImage(
-          imageUrl: widget.post.media.first.thumbnailUrl ?? '',
-          fit: BoxFit.cover,
-          width: double.infinity,
-          height: 240,
-          placeholder: (context, url) => Shimmer.fromColors(
-            baseColor: Colors.grey.shade300,
-            highlightColor: Colors.grey.shade100,
+  Widget _buildVideoThumbnailView() {
+    return SizedBox(
+      height: 240,
+      width: double.infinity,
+      child: Stack(
+        children: [
+          CachedNetworkImage(
+            imageUrl: widget.post.media.first.thumbnailUrl ?? '',
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: 240,
+            placeholder: (context, url) => Shimmer.fromColors(
+              baseColor: Colors.grey.shade300,
+              highlightColor: Colors.grey.shade100,
+              child: Container(
+                width: double.infinity,
+                height: 240,
+                color: Colors.white,
+              ),
+            ),
+            errorWidget: (context, url, error) => Icon(Icons.error),
+          ),
+          Center(
             child: Container(
-              width: double.infinity,
-              height: 240,
-              color: Colors.white,
+              height: 50,
+              width: 50,
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.5),
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                onPressed: () {
+                  Get.to(
+                    () => VideoPlayerPage(
+                      videoUrl: widget.post.media.first.url,
+                      aspectRatio: widget.post.media.first.aspectRatio!,
+                      description: widget.post.description,
+                    ),
+                  );
+                },
+                icon: Icon(Icons.play_arrow, color: Colors.white, size: 30),
+              ),
             ),
           ),
-          errorWidget: (context, url, error) => Icon(Icons.error),
-        ),
-        Center(
-          child: Container(
-            height: 50,
-            width: 50,
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.5),
-              shape: BoxShape.circle,
-            ),
-            child: IconButton(
-              onPressed: () {
-                Get.to(
-                  () => VideoPlayerPage(
-                    videoUrl: widget.post.media.first.url,
-                    aspectRatio: widget.post.media.first.aspectRatio!,
-                    description: widget.post.description,
-                  ),
-                );
-              },
-              icon: Icon(Icons.play_arrow, color: Colors.white, size: 30),
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-}
+        ],
+      ),
+    );
+  }
 
   Widget _buildUserNameTv() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10),
       child: Text(
         '@simmlove',
-        style: TextStyle(
-          color: secondaryColor,
-          fontSize: 14,
-          fontFamily: 'Rubik',
-        ),
+        style: normalBodyStyle.copyWith(color: secondaryColor),
       ),
     );
   }
@@ -260,11 +249,7 @@ Widget _buildVideoThumbnailView() {
       margin: EdgeInsets.symmetric(horizontal: 10),
       child: Text(
         widget.post.description,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 14,
-          fontFamily: 'Rubik',
-        ),
+        style: normalBodyStyle,
         overflow: TextOverflow.clip,
         maxLines: 1,
       ),
@@ -297,14 +282,7 @@ Widget _buildVideoThumbnailView() {
             ),
           ),
           SizedBox(width: 5),
-          Text(
-            "$likesCount",
-            style: TextStyle(
-              fontSize: 12,
-              fontFamily: 'Rubik',
-              color: Colors.white,
-            ),
-          ),
+          Text("$likesCount", style: normalBodyStyle.copyWith(fontSize: 12)),
           SizedBox(width: 15),
           loadingComments
               ? SizedBox(
@@ -319,12 +297,7 @@ Widget _buildVideoThumbnailView() {
           SizedBox(width: 5),
           Text(
             "$commentsCount",
-            style: TextStyle(
-              fontSize: 12,
-              fontFamily: 'Rubik',
-              color: Colors.white,
-            ),
-          ),
+            style:normalBodyStyle.copyWith(fontSize: 12)),
           Spacer(),
           GestureDetector(
             onTap: onShareButtonPressed,

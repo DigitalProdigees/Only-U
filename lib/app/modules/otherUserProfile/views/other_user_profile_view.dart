@@ -11,8 +11,6 @@ class OtherUserProfileView extends GetView<OtherUserProfileController> {
   OtherUserProfileView({super.key});
   final String userId = Get.arguments['userId'];
 
-  
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -50,9 +48,7 @@ class OtherUserProfileView extends GetView<OtherUserProfileController> {
       ),
       title: Text(
         'Brooklyn Simmons',
-        style: GoogleFonts.rubik(
-          textStyle: TextStyle(color: Colors.white, fontSize: 20),
-        ),
+        style: normalBodyStyle.copyWith(fontSize: 20),
       ),
     );
   }
@@ -94,21 +90,14 @@ class OtherUserProfileView extends GetView<OtherUserProfileController> {
                     Text(
                       'Posts',
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.rubik(
-                        textStyle: TextStyle(color: Colors.white, fontSize: 14),
-                      ),
+                      style: normalBodyStyle,
                     ),
                     const SizedBox(height: 4),
                     Obx(
                       () => Text(
                         controller.postsCount.value.toString(),
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Color(0xFFFF3081),
-                          fontSize: 18,
-                          fontFamily: 'Rubik',
-                          height: 0,
-                        ),
+                        style: normalBodyStyle.copyWith(fontSize: 18),
                       ),
                     ),
                   ],
@@ -125,20 +114,16 @@ class OtherUserProfileView extends GetView<OtherUserProfileController> {
                     Text(
                       'Followers',
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.rubik(
-                        textStyle: TextStyle(color: Colors.white, fontSize: 14),
-                      ),
+                      style: normalBodyStyle,
                     ),
                     const SizedBox(height: 4),
                     Obx(
                       () => Text(
                         controller.followers.value.toString(),
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Color(0xFFFF3081),
+                        style: normalBodyStyle.copyWith(
                           fontSize: 18,
-                          fontFamily: 'Rubik',
-                          height: 0,
+                          color: Color(0xFFFF3081),
                         ),
                       ),
                     ),
@@ -154,20 +139,16 @@ class OtherUserProfileView extends GetView<OtherUserProfileController> {
                   Text(
                     'Following',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.rubik(
-                      textStyle: TextStyle(color: Colors.white, fontSize: 14),
-                    ),
+                    style: normalBodyStyle,
                   ),
                   const SizedBox(height: 4),
                   Obx(
                     () => Text(
                       controller.following.value.toString(),
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Color(0xFFFF3081),
+                      style: normalBodyStyle.copyWith(
                         fontSize: 18,
-                        fontFamily: 'Rubik',
-                        height: 0,
+                        color: Color(0xFFFF3081),
                       ),
                     ),
                   ),
@@ -185,9 +166,7 @@ class OtherUserProfileView extends GetView<OtherUserProfileController> {
       margin: EdgeInsets.symmetric(horizontal: 10),
       child: Text(
         '@simmlove',
-        style: GoogleFonts.rubik(
-          textStyle: TextStyle(color: secondaryColor, fontSize: 14),
-        ),
+        style: normalBodyStyle.copyWith(color: secondaryColor),
       ),
     );
   }
@@ -198,11 +177,7 @@ class OtherUserProfileView extends GetView<OtherUserProfileController> {
       height: 60,
       child: Text(
         '🌟 Brooklyn Simmons 🌟\nModel | Dreamer | Wanderer\n📍 NYC | LA | ✈️ Everywhere',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 14,
-          fontFamily: 'Rubik',
-        ),
+        style: normalBodyStyle,
       ),
     );
   }
@@ -288,12 +263,7 @@ class DoneFollowing extends StatelessWidget {
           children: [
             Text(
               'Following',
-              style: TextStyle(
-                color: Color(0xFFFFF7FA),
-                fontSize: 16,
-                fontFamily: 'Rubik',
-                height: 0,
-              ),
+              style: normalBodyStyle.copyWith(fontSize: 16),
             ),
           ],
         ),

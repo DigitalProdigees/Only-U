@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:only_u/app/common/widgets/LoadingView.dart';
 import 'package:only_u/app/common/widgets/PostCommentView.dart';
+import 'package:only_u/app/data/constants.dart';
 import 'package:only_u/app/data/models/post_comment.dart';
 import 'package:only_u/app/services/auth_service.dart';
 import 'package:only_u/app/services/posts_service.dart';
@@ -41,12 +42,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
       ),
       child: Column(
         children: [
-          Text(
-            'Comments',
-            style: GoogleFonts.rubik(
-              textStyle: TextStyle(color: Colors.white, fontSize: 18),
-            ),
-          ),
+          Text('Comments', style: normalBodyStyle.copyWith(fontSize: 18)),
           SizedBox(height: 10),
           Obx(
             () => commentController.loadingComments.value
@@ -96,11 +92,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
           controller: commentController.commentTextFieldController,
           decoration: InputDecoration(
             hintText: 'Add a comment',
-            hintStyle: TextStyle(
-              color: Color(0x66FFF7FA),
-              fontFamily: 'Rubik',
-              fontSize: 14,
-            ),
+            hintStyle: normalBodyStyle.copyWith(color: Color(0x66FFF7FA)),
             border: InputBorder.none,
             isDense: true,
             contentPadding: EdgeInsets.symmetric(vertical: 8),
@@ -142,11 +134,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                     ),
             ),
           ),
-          style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Rubik',
-            fontSize: 14,
-          ),
+          style: normalBodyStyle,
         ),
       ),
     );

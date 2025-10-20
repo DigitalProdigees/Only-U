@@ -13,14 +13,19 @@ const redHeadingStyle = TextStyle(
   fontSize: 26,
   fontWeight: FontWeight.bold,
   color: secondaryColor, // secondary color
-  fontFamily: 'Rubik',
+  fontFamily: 'Avenir',
 );
 
 const whiteSubHeadingStyle = TextStyle(
   fontSize: 18,
   fontWeight: FontWeight.w600,
   color: Colors.white,
-  fontFamily: 'Rubic',
+  fontFamily: 'Avenir',
+);
+
+const normalBodyStyle = TextStyle(
+  color: Colors.white,
+  fontFamily: 'Avenir',
 );
 
 // Dummy Data Models
