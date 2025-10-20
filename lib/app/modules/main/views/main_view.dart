@@ -7,7 +7,9 @@ import 'package:only_u/app/common/widgets/LoadingView.dart';
 import 'package:only_u/app/common/widgets/PostView.dart';
 import 'package:only_u/app/data/constants.dart';
 import 'package:only_u/app/data/models/post_model.dart';
+import 'package:only_u/app/modules/createpost/views/createpost_view.dart';
 import 'package:only_u/app/modules/otherUserProfile/controllers/other_user_profile_controller.dart';
+import 'package:only_u/app/routes/app_pages.dart';
 import '../controllers/main_controller.dart';
 
 class MainView extends GetView<MainController> {
@@ -105,10 +107,15 @@ class MainView extends GetView<MainController> {
               height: 42,
               child: Image.asset('assets/imgs/notification.png'),
             ),
-            SizedBox(
-              width: 42,
-              height: 42,
-              child: Image.asset('assets/imgs/heart.png'),
+            GestureDetector(
+              child: SizedBox(
+                width: 42,
+                height: 42,
+                child: Image.asset('assets/imgs/heart.png'),
+              ),
+              onTap: () {
+                Get.toNamed(Routes.CREATEPOST);
+              },
             ),
           ],
         ),

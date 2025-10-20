@@ -155,4 +155,31 @@ class PostsService {
       );
     }
   }
+
+  Future<ApiResponse> createPost({required dynamic requestBody}) async {
+    try {
+      final resp = await HttpRider().mainPostRoute(
+        "/posts/create",
+        requestBody,
+      );
+
+      if (resp == null || resp.isEmpty) {
+        return ApiResponse(
+          Status: "error",
+          Code: 500,
+          Message: "No data received from server",
+        );
+      }
+      debugPrint("Create Post Response: $resp");
+
+      return ApiResponse.fromJson(resp);
+    } catch (e) {
+      debugPrint("Create Post error: $e");
+      return ApiResponse(
+        Status: "error",
+        Code: 500,
+        Message: "Create Post error: ${e.toString()}",
+      );
+    }
+  }
 }

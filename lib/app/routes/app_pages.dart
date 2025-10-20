@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/createpost/bindings/createpost_binding.dart';
+import '../modules/createpost/views/createpost_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/main/bindings/main_binding.dart';
@@ -43,13 +45,18 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.MAIN,
-      page: () =>  MainView(),
+      page: () => MainView(),
       binding: MainBinding(),
     ),
     GetPage(
       name: _Paths.OTHER_USER_PROFILE,
-      page: () =>  OtherUserProfileView(),
+      page: () => OtherUserProfileView(),
       binding: OtherUserProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.CREATEPOST,
+      page: () => const CreatepostView(),
+      binding: CreatepostBinding(),
     ),
   ];
 }

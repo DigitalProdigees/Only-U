@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:only_u/app/data/constants.dart';
 
 class CustomButton extends StatelessWidget {
   final String title;
@@ -41,10 +42,9 @@ class CustomButton extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 title,
-                style: const TextStyle(
-                  color: Colors.white,
+                style: normalBodyStyle.copyWith(
                   fontSize: 18,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],

@@ -56,6 +56,11 @@
     </array>
   </dict>
 </array>
+<key>NSPhotoLibraryUsageDescription</key>
+<string>We need access to your photo library to upload media.</string>
+<key>NSCameraUsageDescription</key>
+<string>We need access to your camera to capture media.</string>
+
 
 <key>NSAppTransportSecurity</key>
 <dict>
