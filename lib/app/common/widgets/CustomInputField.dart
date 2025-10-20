@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:only_u/app/data/constants.dart';
 
 class Custominputfield extends StatelessWidget {
-  Custominputfield({super.key, this.hintText, this.controller,this.obscureText = false});
+  Custominputfield({
+    super.key,
+    this.hintText,
+    this.controller,
+    this.obscureText = false,
+  });
   TextEditingController? controller;
-  String? hintText ;
-  bool obscureText ;
+  String? hintText;
+  bool obscureText;
 
   @override
   Widget build(BuildContext context) {
@@ -13,18 +19,10 @@ class Custominputfield extends StatelessWidget {
       child: TextField(
         obscureText: obscureText,
         controller: controller,
-        style: const TextStyle(
-          color: Color(0xFFE7F6FF), // input text color
-          fontSize: 14,
-          fontFamily: 'Rubik',
-        ),
+        style: normalBodyStyle,
         decoration: InputDecoration(
           hintText: hintText,
-          hintStyle: const TextStyle(
-            color: Color(0xFFE7F6FF),
-            fontSize: 14,
-            fontFamily: 'Rubik',
-          ),
+          hintStyle: normalBodyStyle,
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 24,
             vertical: 10,

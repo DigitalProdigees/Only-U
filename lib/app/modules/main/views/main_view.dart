@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:only_u/app/common/widgets/LoadingView.dart';
 import 'package:only_u/app/common/widgets/PostView.dart';
 import 'package:only_u/app/data/constants.dart';
 import 'package:only_u/app/data/models/post_model.dart';
@@ -50,34 +51,52 @@ class MainView extends GetView<MainController> {
 
   Widget _buildAppBar() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Hello ,',
-              style: GoogleFonts.oleoScript(
-                textStyle: TextStyle(color: Color(0xFFFF3080), fontSize: 24),
-              ),
-            ),
-            Obx(
-              () => Text(
-                "${controller.currentUserProfile['name'].toString().split(' ').first ?? "Name"}",
-                style: GoogleFonts.rubik(
-                  textStyle: TextStyle(
-                    color: Color(0xFFE7F6FF),
-                    fontSize: 18,
-                    fontFamily: 'Rubik',
-                    height: 0,
-                  ),
+        Text(
+          'Hello',
+          style: GoogleFonts.qwigley(
+            textStyle: TextStyle(
+              color: Colors.white,
+              fontSize: 30,
+              shadows: [
+                Shadow(
+                  offset: Offset(-1.5, -1.5),
+                  blurRadius: 1,
+                  color: Colors.red,
                 ),
-              ),
+                Shadow(
+                  offset: Offset(1.5, -1.5),
+                  blurRadius: 1,
+                  color: Colors.red,
+                ),
+                Shadow(
+                  offset: Offset(-1.5, 1.5),
+                  blurRadius: 1,
+                  color: Colors.red,
+                ),
+                Shadow(
+                  offset: Offset(1.5, 1.5),
+                  blurRadius: 1,
+                  color: Colors.red,
+                ),
+              ],
             ),
-          ],
+          ),
         ),
+        SizedBox(width: 10),
+        Obx(
+          () => Text(
+            ", ${controller.currentUserProfile['name'].toString().split(' ').first}",
+            style: TextStyle(
+              fontFamily: 'Avenir',
+              color: Color(0xFFE7F6FF),
+              fontSize: 18,
+            ),
+          ),
+        ),
+        Spacer(),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -113,10 +132,7 @@ class MainView extends GetView<MainController> {
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           if (index == 0) {
-            return SvgPicture.asset(
-              'assets/imgs/cat_menu.svg',
-              height: 40,
-            );
+            return SvgPicture.asset('assets/imgs/cat_menu.svg', height: 40);
           }
 
           return _buildCategoryIndividualView(categories[index - 1]);
@@ -142,19 +158,11 @@ class MainView extends GetView<MainController> {
             border: Border.all(width: 1, color: Colors.white.withOpacity(0.1)),
             borderRadius: BorderRadius.circular(50),
             color: controller.currentCategoryId.value == category['id']
-                ? Color(0xff122C58)
+                ? Color(0xFF040E1E)
                 : Colors.transparent,
           ),
           child: Center(
-            child: Text(
-              category['name'] as String,
-              style: TextStyle(
-                color: Color(0xFFE7F6FF),
-                fontSize: 14,
-                fontFamily: 'Rubik',
-                height: 1.2, // Use a positive height for proper line spacing
-              ),
-            ),
+            child: Text(category['name'] as String, style: normalBodyStyle),
           ),
         ),
       ),
@@ -168,7 +176,7 @@ class MainView extends GetView<MainController> {
           height: 48,
           padding: const EdgeInsets.symmetric(horizontal: 4),
           decoration: ShapeDecoration(
-            color: Color(0x7F122C58),
+            color: Color(0xFF040E1E),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(100),
             ),
@@ -179,7 +187,7 @@ class MainView extends GetView<MainController> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
-                child: InkWell(
+                child: GestureDetector(
                   onTap: () {
                     debugPrint("My Feed tapped");
                     controller.tabIndex.value = 0;
@@ -216,12 +224,7 @@ class MainView extends GetView<MainController> {
                       children: [
                         Text(
                           'My feed',
-                          style: TextStyle(
-                            color: Color(0xFFFFF7FA),
-                            fontSize: 16,
-                            fontFamily: 'Rubik',
-                            height: 0,
-                          ),
+                          style: normalBodyStyle.copyWith(fontSize: 16),
                         ),
                       ],
                     ),
@@ -229,7 +232,7 @@ class MainView extends GetView<MainController> {
                 ),
               ),
               Expanded(
-                child: InkWell(
+                child: GestureDetector(
                   onTap: () {
                     debugPrint("All tapped");
                     controller.tabIndex.value = 1;
@@ -266,12 +269,7 @@ class MainView extends GetView<MainController> {
                       children: [
                         Text(
                           'All',
-                          style: TextStyle(
-                            color: Color(0xFFE7F6FF),
-                            fontSize: 16,
-                            fontFamily: 'Rubik',
-                            height: 0,
-                          ),
+                          style: normalBodyStyle.copyWith(fontSize: 16),
                         ),
                       ],
                     ),
@@ -382,6 +380,10 @@ class MainView extends GetView<MainController> {
 
   Widget _buildPostsListView() {
     return Obx(() {
+      if (controller.postsLoading.value) {
+        return LoadingView();
+      }
+
       if (controller.posts.isEmpty) {
         return Center(
           child: Text(

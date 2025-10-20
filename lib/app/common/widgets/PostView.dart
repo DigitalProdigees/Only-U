@@ -1,13 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:only_u/app/common/widgets/CommentsBottomSheet.dart';
+import 'package:only_u/app/common/widgets/LoadingView.dart';
 import 'package:only_u/app/common/widgets/VideoPlayer.dart';
 import 'package:only_u/app/data/constants.dart';
 import 'package:only_u/app/data/models/post_model.dart';
 import 'package:only_u/app/services/auth_service.dart';
 import 'package:only_u/app/services/posts_service.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shimmer/shimmer.dart';
 
 class PostView extends StatefulWidget {
   PostView({super.key, required this.post, this.onUserNameTap});
@@ -91,8 +94,6 @@ class _PostViewState extends State<PostView> {
     );
   }
 
- 
-
   @override
   void initState() {
     checkStatus();
@@ -116,7 +117,7 @@ class _PostViewState extends State<PostView> {
         children: [
           _buildUpperRow(),
           widget.post.media.first.type == 'video'
-              ? _buildVideoThumbnainlView()
+              ? _buildVideoThumbnailView()
               // ? VideoPost(
               //     videoUrl: widget.post.media.first.url,
               //     aspectRatio: widget.post.media.first.aspectRatio ?? 16 / 9,
@@ -148,14 +149,7 @@ class _PostViewState extends State<PostView> {
             // width: double.infinity,
             child: GestureDetector(
               onTap: widget.onUserNameTap,
-              child: Text(
-                'Brooklyn Simmons',
-                style: TextStyle(
-                  color: Color(0xFFFFF7FA),
-                  fontSize: 16,
-                  fontFamily: 'Rubik',
-                ),
-              ),
+              child: Text('Brooklyn Simmons', style: normalBodyStyle),
             ),
           ),
           Spacer(),
@@ -174,21 +168,44 @@ class _PostViewState extends State<PostView> {
     return SizedBox(
       height: 240,
       width: double.infinity,
-      child: Image.network(widget.post.media.first.url, fit: BoxFit.cover),
+      child: CachedNetworkImage(
+        imageUrl: widget.post.media.first.url,
+        placeholder: (context, url) => Shimmer.fromColors(
+          baseColor: Colors.grey.shade300,
+          highlightColor: Colors.grey.shade100,
+          child: Container(
+            width: double.infinity,
+            height: 240,
+            color: Colors.white,
+          ),
+        ),
+        errorWidget: (context, url, error) => Icon(Icons.error),
+        fit: BoxFit.cover,
+      ),
     );
   }
 
-  Widget _buildVideoThumbnainlView() {
+  Widget _buildVideoThumbnailView() {
     return SizedBox(
       height: 240,
       width: double.infinity,
       child: Stack(
         children: [
-          Image.network(
-            widget.post.media.first.thumbnailUrl ?? '',
+          CachedNetworkImage(
+            imageUrl: widget.post.media.first.thumbnailUrl ?? '',
             fit: BoxFit.cover,
             width: double.infinity,
             height: 240,
+            placeholder: (context, url) => Shimmer.fromColors(
+              baseColor: Colors.grey.shade300,
+              highlightColor: Colors.grey.shade100,
+              child: Container(
+                width: double.infinity,
+                height: 240,
+                color: Colors.white,
+              ),
+            ),
+            errorWidget: (context, url, error) => Icon(Icons.error),
           ),
           Center(
             child: Container(
@@ -200,7 +217,6 @@ class _PostViewState extends State<PostView> {
               ),
               child: IconButton(
                 onPressed: () {
-                  // Handle play button press
                   Get.to(
                     () => VideoPlayerPage(
                       videoUrl: widget.post.media.first.url,
@@ -223,11 +239,7 @@ class _PostViewState extends State<PostView> {
       margin: EdgeInsets.symmetric(horizontal: 10),
       child: Text(
         '@simmlove',
-        style: TextStyle(
-          color: secondaryColor,
-          fontSize: 14,
-          fontFamily: 'Rubik',
-        ),
+        style: normalBodyStyle.copyWith(color: secondaryColor),
       ),
     );
   }
@@ -237,11 +249,7 @@ class _PostViewState extends State<PostView> {
       margin: EdgeInsets.symmetric(horizontal: 10),
       child: Text(
         widget.post.description,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 14,
-          fontFamily: 'Rubik',
-        ),
+        style: normalBodyStyle,
         overflow: TextOverflow.clip,
         maxLines: 1,
       ),
@@ -274,14 +282,7 @@ class _PostViewState extends State<PostView> {
             ),
           ),
           SizedBox(width: 5),
-          Text(
-            "$likesCount",
-            style: TextStyle(
-              fontSize: 12,
-              fontFamily: 'Rubik',
-              color: Colors.white,
-            ),
-          ),
+          Text("$likesCount", style: normalBodyStyle.copyWith(fontSize: 12)),
           SizedBox(width: 15),
           loadingComments
               ? SizedBox(
@@ -296,12 +297,7 @@ class _PostViewState extends State<PostView> {
           SizedBox(width: 5),
           Text(
             "$commentsCount",
-            style: TextStyle(
-              fontSize: 12,
-              fontFamily: 'Rubik',
-              color: Colors.white,
-            ),
-          ),
+            style:normalBodyStyle.copyWith(fontSize: 12)),
           Spacer(),
           GestureDetector(
             onTap: onShareButtonPressed,
@@ -311,5 +307,4 @@ class _PostViewState extends State<PostView> {
       ),
     );
   }
-
 }

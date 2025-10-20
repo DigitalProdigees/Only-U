@@ -86,21 +86,12 @@ class _PostCommentViewState extends State<PostCommentView> {
               crossAxisAlignment: CrossAxisAlignment.start,
 
               children: [
-                Text(
-                  'Brooklyn Simmons',
-                  style: TextStyle(
-                    color: Color(0xFFFFF7FA),
-                    fontSize: 18,
-                    fontFamily: 'Rubik',
-                  ),
-                ),
+                Text('Brooklyn Simmons', style: normalBodyStyle),
 
                 Text(
                   widget.postComment.text,
-                  style: TextStyle(
+                  style: normalBodyStyle.copyWith(
                     color: Colors.white.withOpacity(0.7),
-                    fontSize: 14,
-                    fontFamily: 'Rubik',
                   ),
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis, // better visual fallback
@@ -128,11 +119,7 @@ class _PostCommentViewState extends State<PostCommentView> {
                 ),
                 Text(
                   likeCount.toString(),
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontFamily: 'Rubik',
-                  ),
+                  style: normalBodyStyle,
                   maxLines: 3,
                 ),
               ],
