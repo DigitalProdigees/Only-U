@@ -7,7 +7,6 @@ import 'package:only_u/app/services/media_service.dart';
 import 'package:only_u/app/services/posts_service.dart';
 import 'package:video_compress/video_compress.dart';
 
-
 class CreatepostController extends GetxController {
   final TextEditingController tagInputcontroller = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
@@ -15,7 +14,7 @@ class CreatepostController extends GetxController {
   final MediaUploadService uploadService = MediaUploadService();
 
   var tags = [].obs;
-  var pickedFilePath = '';
+  var pickedFilePath = ''.obs;
   var loading = false.obs;
   var isVideoType = false;
   var mainMediaUrl = '';
@@ -27,7 +26,7 @@ class CreatepostController extends GetxController {
         : await picker.pickImage(source: source);
 
     if (pickedFile != null) {
-      pickedFilePath = pickedFile.path;
+      pickedFilePath.value = pickedFile.path;
       isVideoType = isVideo;
       debugPrint('Picked File Path: ${pickedFile.path}');
     }
@@ -38,11 +37,11 @@ class CreatepostController extends GetxController {
     if (validatinResult) {
       loading.value = true;
       String? url;
-      File selectedFile = File(pickedFilePath);
+      File selectedFile = File(pickedFilePath.value);
       String folder = isVideoType ? 'videos' : 'images';
 
       if (isVideoType) {
-        final compressedMediaInfo = await compressVideo(pickedFilePath);
+        final compressedMediaInfo = await compressVideo(pickedFilePath.value);
         url = await uploadService.uploadMedia(
           compressedMediaInfo!.file!,
           folder,
@@ -62,7 +61,8 @@ class CreatepostController extends GetxController {
         }
       } else {
         url = await uploadService.uploadMedia(selectedFile, 'images');
-        debugPrint('Image Uploaded Url: $thumbnailUrl');
+        mainMediaUrl = url!;
+        debugPrint('Image Uploaded Url: $mainMediaUrl');
         await createPost();
       }
 
@@ -105,6 +105,9 @@ class CreatepostController extends GetxController {
       Get.snackbar('Post Created', 'Your content is created and published');
       descriptionController.clear();
       tags.clear();
+      isVideoType = false;
+      mainMediaUrl = '';
+      thumbnailUrl = '';
     } else {
       debugPrint('Error While Creating new post: ${response.Message}');
       Get.snackbar('Error', response.Message!);
@@ -113,7 +116,7 @@ class CreatepostController extends GetxController {
 
   Future<File?> generateThumbnail() async {
     final thumbnailFile = await VideoCompress.getFileThumbnail(
-      pickedFilePath,
+      pickedFilePath.value,
       quality: 50, // default(100)
       position: -1, // default(-1)
     );

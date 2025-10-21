@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
 import 'package:only_u/app/common/widgets/CustomButton.dart';
 import 'package:only_u/app/common/widgets/CustomToggleButton.dart';
 import 'package:only_u/app/common/widgets/LoadingView.dart';
 import 'package:only_u/app/data/constants.dart';
-import 'package:only_u/app/services/media_service.dart';
 import '../controllers/createpost_controller.dart';
 
 class CreatepostView extends GetView<CreatepostController> {
@@ -30,6 +28,8 @@ class CreatepostView extends GetView<CreatepostController> {
               _buildInputField(),
               SizedBox(height: 10),
               _buildLabel('Upload Media'),
+              SizedBox(height: 10),
+              _buildSelectFileView(),
               SizedBox(height: 10),
               _buildSelectMediaButton(context),
               SizedBox(height: 10),
@@ -170,6 +170,15 @@ class CreatepostView extends GetView<CreatepostController> {
     );
   }
 
+  Widget _buildSelectFileView() {
+    return Obx(
+      () => Text(
+        controller.pickedFilePath.split('/').last,
+        style: normalBodyStyle.copyWith(fontSize: 10),
+      ),
+    );
+  }
+
   void showMediaPickerDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -215,52 +224,6 @@ class CreatepostView extends GetView<CreatepostController> {
           ),
         );
       },
-    );
-  }
-}
-
-class UploadPage extends StatefulWidget {
-  @override
-  _UploadPageState createState() => _UploadPageState();
-}
-
-class _UploadPageState extends State<UploadPage> {
-  final ImagePicker _picker = ImagePicker();
-  final MediaUploadService _uploadService = MediaUploadService();
-
-  Future<void> pickAndUploadMedia(ImageSource source, bool isVideo) async {
-    final XFile? pickedFile = isVideo
-        ? await _picker.pickVideo(source: source)
-        : await _picker.pickImage(source: source);
-
-    if (pickedFile != null) {
-      File file = File(pickedFile.path);
-      String folder = isVideo ? 'videos' : 'images';
-      String? url = await _uploadService.uploadMedia(file, folder);
-      if (url != null || url!.isNotEmpty) {
-        
-      }
-      debugPrint('Uploaded to: $url');
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          ElevatedButton(
-            onPressed: () => pickAndUploadMedia(ImageSource.camera, false),
-            child: Text('Upload Image'),
-          ),
-          ElevatedButton(
-            onPressed: () => pickAndUploadMedia(ImageSource.gallery, true),
-            child: Text('Upload Video'),
-          ),
-        ],
-      ),
     );
   }
 }

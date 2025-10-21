@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:only_u/app/common/widgets/CustomBottomNavBar.dart';
 import 'package:only_u/app/common/widgets/LoadingView.dart';
 import 'package:only_u/app/common/widgets/PostView.dart';
 import 'package:only_u/app/data/constants.dart';
 import 'package:only_u/app/data/models/post_model.dart';
+import 'package:only_u/app/modules/createpost/controllers/createpost_controller.dart';
 import 'package:only_u/app/modules/createpost/views/createpost_view.dart';
 import 'package:only_u/app/modules/otherUserProfile/controllers/other_user_profile_controller.dart';
 import 'package:only_u/app/routes/app_pages.dart';
@@ -16,38 +18,65 @@ class MainView extends GetView<MainController> {
   MainView({super.key});
 
   final otherUSerProfileController = Get.put(OtherUserProfileController());
+  final CustomNavBarController bottomNavController = Get.put(
+    CustomNavBarController(),
+  );
+  final CreatepostController createpostController = Get.put(
+    CreatepostController(),
+  );
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.black,
-
-        body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _buildAppBar(),
-                SizedBox(height: 20),
-                _buildSearchButton(),
-                SizedBox(height: 20),
-                _buildCategoryHorizontListView(),
-                SizedBox(height: 20),
-                Obx(() => _buildTabView()),
-                SizedBox(height: 10),
-                _buildCaroselView(),
-                SizedBox(height: 20),
-                _buildHighlightView(),
-                SizedBox(height: 10),
-                _buildPostsListView(),
-              ],
-            ),
-          ),
+        bottomNavigationBar: CustomBottomNavBar(),
+        body: Obx(
+          () => bottomNavController.selectedIndex.value == 0
+              ? _buildMainPageBody()
+              : bottomNavController.selectedIndex.value == 1
+              ? _buildCreatePostPageBody()
+              : _buildProfilePageBody(),
         ),
       ),
+    );
+  }
+
+  Widget _buildMainPageBody() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _buildAppBar(),
+            SizedBox(height: 20),
+            _buildSearchButton(),
+            SizedBox(height: 20),
+            _buildCategoryHorizontListView(),
+            SizedBox(height: 20),
+            Obx(() => _buildTabView()),
+            SizedBox(height: 10),
+            _buildCaroselView(),
+            SizedBox(height: 20),
+            _buildHighlightView(),
+            SizedBox(height: 10),
+            _buildPostsListView(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCreatePostPageBody() {
+    return CreatepostView();
+  }
+
+  Widget _buildProfilePageBody() {
+    return Container(
+      color: Colors.black,
+      child: Center(child: Text('Not Implemented Yet', style: normalBodyStyle)),
     );
   }
 
@@ -114,7 +143,7 @@ class MainView extends GetView<MainController> {
                 child: Image.asset('assets/imgs/heart.png'),
               ),
               onTap: () {
-                Get.toNamed(Routes.CREATEPOST);
+                //Todo
               },
             ),
           ],
