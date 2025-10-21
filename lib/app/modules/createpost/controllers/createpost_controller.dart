@@ -1,14 +1,12 @@
 import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:only_u/app/services/media_service.dart';
 import 'package:only_u/app/services/posts_service.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
+import 'package:video_compress/video_compress.dart';
+
 
 class CreatepostController extends GetxController {
   final TextEditingController tagInputcontroller = TextEditingController();
@@ -39,20 +37,32 @@ class CreatepostController extends GetxController {
     final validatinResult = validateForm();
     if (validatinResult) {
       loading.value = true;
-      File file = File(pickedFilePath);
+      String? url;
+      File selectedFile = File(pickedFilePath);
       String folder = isVideoType ? 'videos' : 'images';
-      String? url = await uploadService.uploadMedia(file, folder);
-      debugPrint('Main Media Uploaded : $url');
-      if (url != null || url!.isNotEmpty) {
-        mainMediaUrl = url;
-        //if media type is video then generating and saving the thumbnail
-        if (isVideoType) {
+
+      if (isVideoType) {
+        final compressedMediaInfo = await compressVideo(pickedFilePath);
+        url = await uploadService.uploadMedia(
+          compressedMediaInfo!.file!,
+          folder,
+        );
+
+        if (url != null || url!.isNotEmpty) {
+          debugPrint('Video Uploaded : $url');
+          mainMediaUrl = url;
           final thumbnail = await generateThumbnail();
           thumbnailUrl = await uploadService.uploadMedia(thumbnail!, 'images');
-
           debugPrint('Thunmnail Upload Url: $thumbnailUrl');
+          await createPost(
+            duration: compressedMediaInfo.duration!.toInt(),
+            aspectRatio:
+                (compressedMediaInfo.height! / compressedMediaInfo.width!),
+          );
         }
-
+      } else {
+        url = await uploadService.uploadMedia(selectedFile, 'images');
+        debugPrint('Image Uploaded Url: $thumbnailUrl');
         await createPost();
       }
 
@@ -71,7 +81,7 @@ class CreatepostController extends GetxController {
     return true;
   }
 
-  Future<void> createPost() async {
+  Future<void> createPost({int? duration, double? aspectRatio}) async {
     final requestBody = {
       "userId": FirebaseAuth.instance.currentUser!.uid,
       "categoryId": "JuqjwnzTRo6B3r3g1eeH",
@@ -82,8 +92,8 @@ class CreatepostController extends GetxController {
           "url": mainMediaUrl,
           "thumbnailURL": isVideoType ? thumbnailUrl : null,
           //todo real time paramters to be used
-          "duration": 30, // duration in seconds
-          "aspectRatio": 1.7777, // height/width
+          "duration": duration, // duration in seconds
+          "aspectRatio": aspectRatio, // height/width
         },
       ],
       "tags": tags,
@@ -102,22 +112,31 @@ class CreatepostController extends GetxController {
   }
 
   Future<File?> generateThumbnail() async {
-    try {
-      final String? filePath = await VideoThumbnail.thumbnailFile(
-        video: pickedFilePath,
-        imageFormat: ImageFormat.JPEG,
-        maxWidth: 128,
-        quality: 25,
-        thumbnailPath: (await getTemporaryDirectory()).path,
-      );
+    final thumbnailFile = await VideoCompress.getFileThumbnail(
+      pickedFilePath,
+      quality: 50, // default(100)
+      position: -1, // default(-1)
+    );
+    return thumbnailFile;
+  }
 
-      if (filePath != null) {
-        return File(filePath);
-      } else {
-        return null;
-      }
+  Future<MediaInfo?> compressVideo(String videoPath) async {
+    try {
+      // Optional: show compression progress
+      // VideoCompress.compressProgress$.subscribe((progress) {
+      //   debugPrint('Compression progress: $progress%');
+      // });
+
+      final MediaInfo? compressedVideo = await VideoCompress.compressVideo(
+        videoPath,
+        quality:
+            VideoQuality.MediumQuality, // Options: Low, Medium, High, Default
+        deleteOrigin:
+            false, // Set to true to delete the original file after compression
+      );
+      return compressedVideo;
     } catch (e) {
-      debugPrint('Thumbnail generation failed: $e');
+      debugPrint('Video compression failed: $e');
       return null;
     }
   }
