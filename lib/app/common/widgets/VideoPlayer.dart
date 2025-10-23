@@ -7,7 +7,7 @@ class VideoPlayerPage extends StatefulWidget {
   const VideoPlayerPage({
     super.key,
     this.videoUrl = '',
-    this.aspectRatio = 16 / 9,
+    this.aspectRatio = 0.5,
     this.description = 'This is the Post Description'
   });
 
@@ -68,7 +68,7 @@ class VideoPost extends StatefulWidget {
   const VideoPost({
     super.key,
     required this.videoUrl,
-    this.aspectRatio = 16 / 9,
+    this.aspectRatio = 0.5,
   });
 
   @override

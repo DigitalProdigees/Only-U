@@ -50,6 +50,7 @@ class CreatepostController extends GetxController {
             compressedMediaInfo.file!,
             folder,true
           );
+         
         } else {
           loading.value = false;
           Get.snackbar(
@@ -66,13 +67,19 @@ class CreatepostController extends GetxController {
           debugPrint('Video Uploaded : $url');
           mainMediaUrl = url;
           final thumbnail = await generateThumbnail();
-          thumbnailUrl = await uploadService.uploadMedia(thumbnail!, 'images',false);
+          thumbnailUrl = await uploadService.uploadMedia(
+            thumbnail!,
+            'images',
+            false,
+          );
           debugPrint('Thunmnail Upload Url: $thumbnailUrl');
 
           await createPost(
             duration: compressedMediaInfo.duration!.toInt(),
-            aspectRatio:
-                (compressedMediaInfo.height! / compressedMediaInfo.width!),
+            aspectRatio: getAspectRatio(
+              compressedMediaInfo.width!,
+              compressedMediaInfo.height!,
+            ),
           );
         } else {
           loading.value = false;
@@ -86,7 +93,7 @@ class CreatepostController extends GetxController {
           debugPrint('Video upload failed');
         }
       } else {
-        url = await uploadService.uploadMedia(selectedFile, 'images',false);
+        url = await uploadService.uploadMedia(selectedFile, 'images', false);
         mainMediaUrl = url!;
         debugPrint('Image Uploaded Url: $mainMediaUrl');
         await createPost();
@@ -94,6 +101,11 @@ class CreatepostController extends GetxController {
 
       loading.value = false;
     }
+  }
+
+  double getAspectRatio(int width, int height) {
+    if (height == 0) return 0.0; // Prevent division by zero
+    return width / height;
   }
 
   bool validateForm() {
