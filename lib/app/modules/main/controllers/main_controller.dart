@@ -30,7 +30,7 @@ class MainController extends GetxController {
     postsLoading.value = true;
     final resp = await PostsService().getPosts(
       page: currentPostsPage,
-      limit: 10,
+      limit: 100,
       userId: authService.currentUser?.uid ?? '',
       categoryId: currentCategoryId.value,
     );
