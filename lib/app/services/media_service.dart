@@ -6,10 +6,11 @@ import 'package:path/path.dart';
 class MediaUploadService {
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
-  Future<String?> uploadMedia(File file, String folder) async {
+  Future<String?> uploadMedia(File file, String folder,bool isVideoType ) async {
     try {
       String fileName = basename(file.path);
       Reference ref = _storage.ref().child('$folder/$fileName');
+      final metadata = SettableMetadata(contentType: isVideoType ? 'video/mp4' : 'image/jpeg');
       UploadTask uploadTask = ref.putFile(file);
 
       TaskSnapshot snapshot = await uploadTask;

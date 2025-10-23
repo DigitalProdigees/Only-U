@@ -27,17 +27,15 @@ class MainView extends GetView<MainController> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        bottomNavigationBar: CustomBottomNavBar(),
-        body: Obx(
-          () => bottomNavController.selectedIndex.value == 0
-              ? _buildMainPageBody()
-              : bottomNavController.selectedIndex.value == 1
-              ? _buildCreatePostPageBody()
-              : _buildProfilePageBody(),
-        ),
+    return Scaffold(
+      backgroundColor: Colors.black,
+      bottomNavigationBar: CustomBottomNavBar(),
+      body: Obx(
+        () => bottomNavController.selectedIndex.value == 0
+            ? _buildMainPageBody()
+            : bottomNavController.selectedIndex.value == 1
+            ? _buildCreatePostPageBody()
+            : _buildProfilePageBody(),
       ),
     );
   }
@@ -50,6 +48,7 @@ class MainView extends GetView<MainController> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            SizedBox(height: 35),
             _buildAppBar(),
             SizedBox(height: 20),
             _buildSearchButton(),
@@ -85,47 +84,57 @@ class MainView extends GetView<MainController> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
-          'Hello',
-          style: GoogleFonts.qwigley(
-            textStyle: TextStyle(
-              color: Colors.white,
-              fontSize: 30,
-              shadows: [
-                Shadow(
-                  offset: Offset(-1.5, -1.5),
-                  blurRadius: 1,
-                  color: Colors.red,
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Hello,',
+              style: GoogleFonts.qwigley(
+                textStyle: TextStyle(
+                  color: Colors.white,
+                  fontSize: 30,
+                  shadows: [
+                    Shadow(
+                      offset: Offset(-1.5, -1.5),
+                      blurRadius: 1,
+                      color: Colors.red,
+                    ),
+                    Shadow(
+                      offset: Offset(1.5, -1.5),
+                      blurRadius: 1,
+                      color: Colors.red,
+                    ),
+                    Shadow(
+                      offset: Offset(-1.5, 1.5),
+                      blurRadius: 1,
+                      color: Colors.red,
+                    ),
+                    Shadow(
+                      offset: Offset(1.5, 1.5),
+                      blurRadius: 1,
+                      color: Colors.red,
+                    ),
+                  ],
                 ),
-                Shadow(
-                  offset: Offset(1.5, -1.5),
-                  blurRadius: 1,
-                  color: Colors.red,
-                ),
-                Shadow(
-                  offset: Offset(-1.5, 1.5),
-                  blurRadius: 1,
-                  color: Colors.red,
-                ),
-                Shadow(
-                  offset: Offset(1.5, 1.5),
-                  blurRadius: 1,
-                  color: Colors.red,
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
-        SizedBox(width: 10),
-        Obx(
-          () => Text(
-            ", ${controller.currentUserProfile['name'].toString().split(' ').first}",
-            style: TextStyle(
-              fontFamily: 'Avenir',
-              color: Color(0xFFE7F6FF),
-              fontSize: 18,
+            SizedBox(width: 2),
+            Obx(
+              () => Text(
+                controller.currentUserProfile['name']
+                    .toString()
+                    .split(' ')
+                    .first,
+                style: TextStyle(
+                  fontFamily: 'Avenir',
+                  color: Color(0xFFE7F6FF),
+                  fontSize: 18,
+                ),
+              ),
             ),
-          ),
+          ],
         ),
         Spacer(),
         Row(

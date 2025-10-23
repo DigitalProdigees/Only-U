@@ -42,25 +42,51 @@ class CreatepostController extends GetxController {
 
       if (isVideoType) {
         final compressedMediaInfo = await compressVideo(pickedFilePath.value);
-        url = await uploadService.uploadMedia(
-          compressedMediaInfo!.file!,
-          folder,
-        );
+        if (compressedMediaInfo != null) {
+          debugPrint(
+            'Video Compressed: ${compressedMediaInfo.file!.path}, Size: ${compressedMediaInfo.filesize}',
+          );
+          url = await uploadService.uploadMedia(
+            compressedMediaInfo.file!,
+            folder,true
+          );
+        } else {
+          loading.value = false;
+          Get.snackbar(
+            'Error',
+            'Video compression failed. Please try again.',
 
-        if (url != null || url!.isNotEmpty) {
+            snackPosition: SnackPosition.BOTTOM,
+          );
+          debugPrint('Video compression failed');
+          return;
+        }
+
+        if (url != null) {
           debugPrint('Video Uploaded : $url');
           mainMediaUrl = url;
           final thumbnail = await generateThumbnail();
-          thumbnailUrl = await uploadService.uploadMedia(thumbnail!, 'images');
+          thumbnailUrl = await uploadService.uploadMedia(thumbnail!, 'images',false);
           debugPrint('Thunmnail Upload Url: $thumbnailUrl');
+
           await createPost(
             duration: compressedMediaInfo.duration!.toInt(),
             aspectRatio:
                 (compressedMediaInfo.height! / compressedMediaInfo.width!),
           );
+        } else {
+          loading.value = false;
+          Get.snackbar(
+            'Error',
+            'Video upload failed. Please try again.',
+
+            snackPosition: SnackPosition.BOTTOM,
+          );
+
+          debugPrint('Video upload failed');
         }
       } else {
-        url = await uploadService.uploadMedia(selectedFile, 'images');
+        url = await uploadService.uploadMedia(selectedFile, 'images',false);
         mainMediaUrl = url!;
         debugPrint('Image Uploaded Url: $mainMediaUrl');
         await createPost();
