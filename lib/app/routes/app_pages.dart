@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/connections/bindings/connections_binding.dart';
+import '../modules/connections/views/connections_view.dart';
 import '../modules/createpost/bindings/createpost_binding.dart';
 import '../modules/createpost/views/createpost_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -62,8 +64,13 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.PROFILE,
-      page: () =>  ProfileView(),
+      page: () => ProfileView(),
       binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.CONNECTIONS,
+      page: () => ConnectionsView(),
+      binding: ConnectionsBinding(),
     ),
   ];
 }

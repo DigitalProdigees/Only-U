@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:only_u/app/data/constants.dart';
+import 'package:only_u/app/modules/connections/views/connections_view.dart';
 import '../../../common/widgets/VerticalMargin.dart';
 import '../controllers/profile_controller.dart';
 import 'profile_editing_view.dart';
@@ -192,6 +193,26 @@ class ProfileView extends GetView<ProfileController> {
             Spacer(),
             Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
           ],
+        ),
+        VerticalMargin(),
+        GestureDetector(
+          onTap: () {
+            Get.to(() => ConnectionsView());
+            controller.toggleMenu();
+          },
+          child: Row(
+            children: [
+              Text(
+                'Connections',
+                style: normalBodyStyle.copyWith(
+                  fontSize: 16,
+                  color: Colors.white,
+                ),
+              ),
+              Spacer(),
+              Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
+            ],
+          ),
         ),
         VerticalMargin(),
         Row(

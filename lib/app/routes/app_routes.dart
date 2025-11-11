@@ -11,6 +11,7 @@ abstract class Routes {
   static const OTHER_USER_PROFILE = _Paths.OTHER_USER_PROFILE;
   static const CREATEPOST = _Paths.CREATEPOST;
   static const PROFILE = _Paths.PROFILE;
+  static const CONNECTIONS = _Paths.CONNECTIONS;
 }
 
 abstract class _Paths {
@@ -23,4 +24,5 @@ abstract class _Paths {
   static const OTHER_USER_PROFILE = '/other-user-profile';
   static const CREATEPOST = '/createpost';
   static const PROFILE = '/profile';
+  static const CONNECTIONS = '/connections';
 }
