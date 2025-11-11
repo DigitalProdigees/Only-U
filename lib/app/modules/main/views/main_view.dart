@@ -11,6 +11,7 @@ import 'package:only_u/app/data/models/post_model.dart';
 import 'package:only_u/app/modules/createpost/controllers/createpost_controller.dart';
 import 'package:only_u/app/modules/createpost/views/createpost_view.dart';
 import 'package:only_u/app/modules/otherUserProfile/controllers/other_user_profile_controller.dart';
+import 'package:only_u/app/modules/profile/views/profile_view.dart';
 import 'package:only_u/app/routes/app_pages.dart';
 import '../controllers/main_controller.dart';
 
@@ -73,10 +74,7 @@ class MainView extends GetView<MainController> {
   }
 
   Widget _buildProfilePageBody() {
-    return Container(
-      color: Colors.black,
-      child: Center(child: Text('Not Implemented Yet', style: normalBodyStyle)),
-    );
+    return ProfileView();
   }
 
   Widget _buildAppBar() {

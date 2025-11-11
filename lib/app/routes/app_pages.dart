@@ -8,6 +8,8 @@ import '../modules/main/bindings/main_binding.dart';
 import '../modules/main/views/main_view.dart';
 import '../modules/otherUserProfile/bindings/other_user_profile_binding.dart';
 import '../modules/otherUserProfile/views/other_user_profile_view.dart';
+import '../modules/profile/bindings/profile_binding.dart';
+import '../modules/profile/views/profile_view.dart';
 import '../modules/signin/bindings/signin_binding.dart';
 import '../modules/signin/views/signin_view.dart';
 import '../modules/signup/bindings/signup_binding.dart';
@@ -57,6 +59,11 @@ class AppPages {
       name: _Paths.CREATEPOST,
       page: () => const CreatepostView(),
       binding: CreatepostBinding(),
+    ),
+    GetPage(
+      name: _Paths.PROFILE,
+      page: () =>  ProfileView(),
+      binding: ProfileBinding(),
     ),
   ];
 }

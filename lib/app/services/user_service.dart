@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:only_u/app/common/repository/http_client.dart';
@@ -57,6 +58,53 @@ class UserService {
         Code: 500,
         Message: "Error checking user following status: ${e.toString()}",
       );
+    }
+  }
+
+  Future<Map<String, dynamic>?> getCurrentUserProfile() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        debugPrint("No authenticated user.");
+        return null;
+      }
+
+      final docSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      if (docSnapshot.exists) {
+        return docSnapshot.data();
+      } else {
+        debugPrint("User profile not found.");
+        return null;
+      }
+    } catch (e) {
+      debugPrint("Error fetching profile: $e");
+      return null;
+    }
+  }
+
+  Future<bool> updateUserProfile(Map<String, dynamic> updatedData) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        debugPrint("No authenticated user.");
+        return false;
+      }
+
+      final userRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid);
+
+      await userRef.update(updatedData);
+
+      debugPrint("Profile updated successfully!");
+      return true;
+    } catch (e) {
+      debugPrint("Error updating profile: $e");
+      return false;
     }
   }
 }

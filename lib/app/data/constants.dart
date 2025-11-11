@@ -8,6 +8,8 @@ const String baseURl =
     "https://us-central1-only-u-48058.cloudfunctions.net/api";
 const String postsLike = "/posts/like";
 
+const String defaultAvatorUrl = 'https://via.placeholder.com/150';
+
 //Text Styles
 const redHeadingStyle = TextStyle(
   fontSize: 26,
