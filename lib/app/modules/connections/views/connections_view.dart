@@ -16,12 +16,7 @@ class ConnectionsView extends GetView<ConnectionsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        title: Text('Connections', style: normalBodyStyle),
-        backgroundColor: Colors.black,
-        iconTheme: IconThemeData(color: Colors.white),
-        actions: [SizedBox(child: SvgPicture.asset('assets/imgs/search.svg'))],
-      ),
+      appBar: _buildAppBar(),
       body: Container(
         padding: EdgeInsets.all(10),
         child: Column(
@@ -37,6 +32,15 @@ class ConnectionsView extends GetView<ConnectionsController> {
           ],
         ),
       ),
+    );
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      title: Text('Connections', style: normalBodyStyle),
+      backgroundColor: Colors.black,
+      iconTheme: IconThemeData(color: Colors.white),
+      actions: [SizedBox(child: SvgPicture.asset('assets/imgs/search.svg'))],
     );
   }
 
@@ -150,6 +154,28 @@ class ConnectionsView extends GetView<ConnectionsController> {
     );
   }
 
+  Widget _buildFollowersListView() {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: 20,
+        itemBuilder: (context, index) {
+          return _buildConnectionView();
+        },
+      ),
+    );
+  }
+
+  Widget _buildFollowingListView() {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: 5,
+        itemBuilder: (context, index) {
+          return _buildConnectionView();
+        },
+      ),
+    );
+  }
+
   Widget _buildConnectionView() {
     return Container(
       // height: 50,
@@ -186,28 +212,6 @@ class ConnectionsView extends GetView<ConnectionsController> {
             ],
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildFollowersListView() {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: 20,
-        itemBuilder: (context, index) {
-          return _buildConnectionView();
-        },
-      ),
-    );
-  }
-
-  Widget _buildFollowingListView() {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return _buildConnectionView();
-        },
       ),
     );
   }

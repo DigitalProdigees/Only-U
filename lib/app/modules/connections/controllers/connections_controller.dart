@@ -3,9 +3,6 @@ import 'package:get/get.dart';
 class ConnectionsController extends GetxController {
   var tabIndex = 0.obs;
 
-  
-
-  final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
@@ -21,5 +18,4 @@ class ConnectionsController extends GetxController {
     super.onClose();
   }
 
-  void increment() => count.value++;
 }
