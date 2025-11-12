@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
+import 'package:only_u/app/common/widgets/LoadingView.dart';
 import 'package:only_u/app/common/widgets/VerticalMargin.dart';
 import 'package:only_u/app/data/constants.dart';
 
@@ -24,11 +25,12 @@ class ConnectionsView extends GetView<ConnectionsController> {
             VerticalMargin(),
             _buildTabView(),
             VerticalMargin(),
-            Obx(
-              () => controller.tabIndex.value == 0
-                  ? _buildFollowersListView()
-                  : _buildFollowingListView(),
-            ),
+            _buildConnectionsListView(),
+            // Obx(
+            //   () => controller.tabIndex.value == 0
+            //       ? _buildFollowersListView()
+            //       : _buildFollowingListView(),
+            // ),
           ],
         ),
       ),
@@ -65,8 +67,9 @@ class ConnectionsView extends GetView<ConnectionsController> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      controller.tabIndex.value = 0;
                       debugPrint("Followers tapped");
+                      controller.tabIndex.value = 0;
+                      controller.loadConnections();
                     },
                     child: Container(
                       height: 42,
@@ -107,8 +110,9 @@ class ConnectionsView extends GetView<ConnectionsController> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      controller.tabIndex.value = 1;
                       debugPrint("Following tapped");
+                      controller.tabIndex.value = 1;
+                      controller.loadConnections();
                     },
                     child: Container(
                       height: 42,
@@ -154,29 +158,29 @@ class ConnectionsView extends GetView<ConnectionsController> {
     );
   }
 
-  Widget _buildFollowersListView() {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: 20,
-        itemBuilder: (context, index) {
-          return _buildConnectionView();
-        },
-      ),
+  Widget _buildConnectionsListView() {
+    return Obx(
+      () => controller.loading.value
+          ? Align(alignment: Alignment.center, child: LoadingView())
+          : controller.connections.isNotEmpty
+          ? Expanded(
+              child: ListView.builder(
+                itemCount: controller.connections.length,
+                itemBuilder: (context, index) {
+                  return _buildConnectionView(index);
+                },
+              ),
+            )
+          : Center(
+              child: Text(
+                'No ${controller.tabIndex.value == 0 ? 'followers' : 'following'} yet!',
+                style: normalBodyStyle,
+              ),
+            ),
     );
   }
 
-  Widget _buildFollowingListView() {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return _buildConnectionView();
-        },
-      ),
-    );
-  }
-
-  Widget _buildConnectionView() {
+  Widget _buildConnectionView(int index) {
     return Container(
       // height: 50,
       width: Get.width,
@@ -187,7 +191,7 @@ class ConnectionsView extends GetView<ConnectionsController> {
             radius: 30,
             //todo
             backgroundImage: NetworkImage(
-              'https://firebasestorage.googleapis.com/v0/b/only-u-48058.firebasestorage.app/o/user_uploads%2Fs0dcGccCYIQ8JyZ3kEIvJzR28ag2%2F1762880150085.jpg?alt=media&token=cfd1f4d9-86fe-48d5-a585-f389cf489c88',
+              controller.connections[index]['avator'] ?? defaultAvatorUrl,
             ),
           ),
           SizedBox(width: 10),
@@ -196,14 +200,14 @@ class ConnectionsView extends GetView<ConnectionsController> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Luna Cruz',
+                controller.connections[index]['name'] ?? '',
                 style: normalBodyStyle.copyWith(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
               ),
               Text(
-                '@Cluna_86',
+                controller.connections[index]['email'] ?? '',
                 style: normalBodyStyle.copyWith(
                   fontSize: 14,
                   color: secondaryColor,

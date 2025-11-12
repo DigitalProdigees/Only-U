@@ -8,7 +8,7 @@ const String baseURl =
     "https://us-central1-only-u-48058.cloudfunctions.net/api";
 const String postsLike = "/posts/like";
 
-const String defaultAvatorUrl = 'https://via.placeholder.com/150';
+const String defaultAvatorUrl = 'https://firebasestorage.googleapis.com/v0/b/only-u-48058.firebasestorage.app/o/user_uploads%2Fs0dcGccCYIQ8JyZ3kEIvJzR28ag2%2F1762951511842.jpg?alt=media&token=6fe7c4d7-ea22-4373-8810-b83ec7b42e30';
 
 //Text Styles
 const redHeadingStyle = TextStyle(

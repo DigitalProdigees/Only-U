@@ -107,4 +107,32 @@ class UserService {
       return false;
     }
   }
+
+  Future<ApiResponse> getFollowingOrFollowers({
+    required String connectionType, // followers or following
+  }) async {
+    final currentUserId = FirebaseAuth.instance.currentUser?.uid;
+    try {
+      final resp = await HttpRider().mainGetRoute(
+        "/users/$currentUserId/$connectionType",
+      );
+
+      if (resp == null || resp.isEmpty) {
+        return ApiResponse(
+          Status: "error",
+          Code: 500,
+          Message: "No data received from server",
+        );
+      }
+      debugPrint("Getting users connections: $resp");
+
+      return ApiResponse.fromJson(resp);
+    } catch (e) {
+      return ApiResponse(
+        Status: "error",
+        Code: 500,
+        Message: "Error Getting users connections: ${e.toString()}",
+      );
+    }
+  }
 }
