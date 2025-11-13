@@ -10,7 +10,6 @@ import 'profile_editing_view.dart';
 class ProfileView extends GetView<ProfileController> {
   ProfileView({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -226,6 +225,22 @@ class ProfileView extends GetView<ProfileController> {
             Spacer(),
             Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
           ],
+        ),
+        GestureDetector(
+          onTap: controller.onLogoutTapped,
+          child: Row(
+            children: [
+              Text(
+                'Logout',
+                style: normalBodyStyle.copyWith(
+                  fontSize: 16,
+                  color: Colors.white,
+                ),
+              ),
+              Spacer(),
+              Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
+            ],
+          ),
         ),
       ],
     );
