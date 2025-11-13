@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:only_u/app/data/constants.dart';
 import 'package:only_u/app/modules/profile/controllers/profile_controller.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../services/one_to_one_chat_service.dart';
 import '../../chat/one_to_one_chat_page.dart';
@@ -34,7 +36,7 @@ class OtherUserProfileView extends GetView<OtherUserProfileController> {
               SizedBox(height: 20),
               _buildButtonsRow(),
               SizedBox(height: 10),
-              _buildGridView(),
+              _buildPostsGridView(context),
             ],
           ),
         ),
@@ -262,8 +264,40 @@ class OtherUserProfileView extends GetView<OtherUserProfileController> {
     }
   }
 
-  Widget _buildGridView() {
-    return ThreeColumnGrid();
+  Widget _buildPostsGridView(BuildContext context) {
+    final double itemSize = MediaQuery.of(context).size.width / 3;
+    return Expanded(
+      child: Obx(
+        () => GridView.builder(
+          padding: EdgeInsets.zero,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            childAspectRatio: 1, // width = height
+          ),
+          itemCount: controller.postsImages.length,
+          itemBuilder: (context, index) {
+            return SizedBox(
+              height: itemSize,
+              width: itemSize,
+              child: CachedNetworkImage(
+                imageUrl: controller.postsImages[index],
+                placeholder: (context, url) => Shimmer.fromColors(
+                  baseColor: Colors.grey.shade300,
+                  highlightColor: Colors.grey.shade100,
+                  child: Container(
+                    width: double.infinity,
+                    height: 240,
+                    color: Colors.white,
+                  ),
+                ),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+                fit: BoxFit.cover,
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 }
 
@@ -324,44 +358,6 @@ class DoneFollowing extends StatelessWidget {
             Text('Following', style: normalBodyStyle.copyWith(fontSize: 16)),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class ThreeColumnGrid extends StatelessWidget {
-  final List<String> imageUrls = [
-    'https://images.pexels.com/photos/2065203/pexels-photo-2065203.jpeg',
-    'https://images.pexels.com/photos/2065200/pexels-photo-2065200.jpeg',
-    'https://images.pexels.com/photos/1468379/pexels-photo-1468379.jpeg',
-    'https://images.pexels.com/photos/160599/beauty-leather-style-girl-160599.jpeg',
-    'https://images.pexels.com/photos/1162983/pexels-photo-1162983.jpeg',
-    'https://images.pexels.com/photos/2169434/pexels-photo-2169434.jpeg',
-    'https://images.pexels.com/photos/2613260/pexels-photo-2613260.jpeg',
-    'https://images.pexels.com/photos/2744193/pexels-photo-2744193.jpeg',
-    'https://images.pexels.com/photos/732425/pexels-photo-732425.jpeg',
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    final double itemSize = MediaQuery.of(context).size.width / 3;
-
-    return Expanded(
-      child: GridView.builder(
-        padding: EdgeInsets.zero,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          childAspectRatio: 1, // width = height
-        ),
-        itemCount: imageUrls.length,
-        itemBuilder: (context, index) {
-          return Container(
-            padding: EdgeInsets.all(3),
-            width: itemSize,
-            height: itemSize,
-            child: Image.network(imageUrls[index], fit: BoxFit.cover),
-          );
-        },
       ),
     );
   }

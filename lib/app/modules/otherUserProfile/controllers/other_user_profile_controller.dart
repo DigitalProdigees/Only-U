@@ -14,6 +14,7 @@ class OtherUserProfileController extends GetxController {
   var email = "".obs;
   var otherUserAvator = defaultAvatorUrl.obs;
   var loadingOtherUserProfile = false.obs;
+  var postsImages = [].obs;
 
   @override
   void onInit() {
@@ -59,13 +60,25 @@ class OtherUserProfileController extends GetxController {
       following.value = response.Data['followingCount'] ?? 0;
       postsCount.value = response.Data['postsCount'] ?? 0;
       otherUserAvator.value = response.Data['avator'] ?? defaultAvatorUrl;
-      userName.value = response.Data['userName'] ;
-      email.value = response.Data['email'] ?? "" ;
-      description.value =  response.Data['description'] ?? "" ;
+      userName.value = response.Data['userName'];
+      email.value = response.Data['email'] ?? "";
+      description.value = response.Data['description'] ?? "";
+      final postsMedia = response.Data['postsMedia'] as List;
+      postsImages.value = postsMedia
+          .map((postMedea) => extractPostImage(postMedea))
+          .toList();
     } else {
       // Handle error (e.g., show an error message)
       debugPrint("Error fetching other user stats: ${response.Message}");
     }
     loadingOtherUserProfile.value = false;
+  }
+
+  String extractPostImage(Map postMedia) {
+    if (postMedia['type'] == 'image') {
+      return postMedia['url'];
+    } else {
+      return postMedia['thumbnailURL'];
+    }
   }
 }
