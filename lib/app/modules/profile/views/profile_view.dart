@@ -10,7 +10,6 @@ import 'profile_editing_view.dart';
 class ProfileView extends GetView<ProfileController> {
   ProfileView({super.key});
 
-  final controller = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
