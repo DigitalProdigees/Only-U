@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:only_u/app/common/repository/http_client.dart';
 import 'package:only_u/app/data/models/api_response_model.dart';
@@ -156,6 +157,32 @@ class UserService {
         Code: 500,
         Message: "Error Getting other user stats: ${e.toString()}",
       );
+    }
+  }
+
+  Future<void> updateFcmToken() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        debugPrint("No authenticated user.");
+        return;
+      }
+
+      final fcmToken = await FirebaseMessaging.instance.getToken();
+      if (fcmToken == null) {
+        debugPrint("Failed to get FCM token.");
+        return;
+      }
+
+      final userRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid);
+
+      await userRef.update({'fcmToken': fcmToken});
+
+      debugPrint("FCM token updated successfully!");
+    } catch (e) {
+      debugPrint("Error updating FCM token: $e");
     }
   }
 }

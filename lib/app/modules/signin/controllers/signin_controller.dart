@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:only_u/app/services/auth_service.dart';
+import 'package:only_u/app/services/user_service.dart';
 
 class SigninController extends GetxController {
   var termsAndConditionsChecked = false.obs;
@@ -33,6 +34,7 @@ class SigninController extends GetxController {
       Get.snackbar("Success", "Logged in successfully");
       // Navigate to home or dashboard
       Get.offAllNamed('/main');
+      await UserService().updateFcmToken();
     } else {
       Get.snackbar("Error", "Login failed. Please check your credentials.");
     }
