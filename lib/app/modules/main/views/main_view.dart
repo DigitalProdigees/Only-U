@@ -451,9 +451,10 @@ class MainView extends GetView<MainController> {
           return PostView(
             post: post,
             onUserNameTap: () {
-              // Navigate to user profile page
               otherUSerProfileController.otherUserId = post.userId;
               otherUSerProfileController.checkFollowingStatus();
+              otherUSerProfileController.getOtherUserStats(post.userId);
+              // Navigating to user profile page
               Get.toNamed(
                 '/other-user-profile',
                 arguments: {'userId': post.userId},

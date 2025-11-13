@@ -51,9 +51,11 @@ class OtherUserProfileView extends GetView<OtherUserProfileController> {
           Get.back();
         },
       ),
-      title: Text(
-        'Brooklyn Simmons',
-        style: normalBodyStyle.copyWith(fontSize: 20),
+      title: Obx(
+        () => Text(
+          controller.userName.value,
+          style: normalBodyStyle.copyWith(fontSize: 20),
+        ),
       ),
     );
   }
@@ -70,19 +72,7 @@ class OtherUserProfileView extends GetView<OtherUserProfileController> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                clipBehavior: Clip.antiAlias,
-                decoration: ShapeDecoration(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(546.88),
-                  ),
-                ),
-                child: SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: Image.asset('assets/imgs/avator.png'),
-                ),
-              ),
+              _buildAvatorPart(),
               const SizedBox(width: 2),
 
               Container(
@@ -166,12 +156,50 @@ class OtherUserProfileView extends GetView<OtherUserProfileController> {
     );
   }
 
+  Widget _buildAvatorPart() {
+    return Align(
+      alignment: Alignment.center,
+      child: Container(
+        height: 60,
+        width: 60,
+        clipBehavior: Clip.antiAlias,
+        decoration: ShapeDecoration(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(546.88),
+          ),
+          shadows: [
+            BoxShadow(
+              color: Color(0x3FFFFFFF),
+              blurRadius: 17.50,
+              offset: Offset(0, 0),
+              spreadRadius: 0,
+            ),
+          ],
+        ),
+        child: Obx(
+          () => Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(controller.otherUserAvator.value),
+                fit: BoxFit.fill,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildUserNameTv() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10),
-      child: Text(
-        '@simmlove',
-        style: normalBodyStyle.copyWith(color: secondaryColor),
+      child: Obx(
+        () => Text(
+          '@${controller.email.value}',
+          style: normalBodyStyle.copyWith(color: secondaryColor),
+        ),
       ),
     );
   }
@@ -180,9 +208,8 @@ class OtherUserProfileView extends GetView<OtherUserProfileController> {
     return SizedBox(
       width: 343,
       height: 60,
-      child: Text(
-        '🌟 Brooklyn Simmons 🌟\nModel | Dreamer | Wanderer\n📍 NYC | LA | ✈️ Everywhere',
-        style: normalBodyStyle,
+      child: Obx(
+        () => Text(controller.description.value, style: normalBodyStyle),
       ),
     );
   }
