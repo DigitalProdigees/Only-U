@@ -1,15 +1,20 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:only_u/app/data/constants.dart';
+import 'package:only_u/app/modules/profile/controllers/profile_controller.dart';
 
+import '../../../services/one_to_one_chat_service.dart';
+import '../../chat/one_to_one_chat_page.dart';
 import '../controllers/other_user_profile_controller.dart';
 
 class OtherUserProfileView extends GetView<OtherUserProfileController> {
   OtherUserProfileView({super.key});
   final String userId = Get.arguments['userId'];
+  final OneToOneChatService _chatService = OneToOneChatService();
+  final ProfileController profileController = Get.find<ProfileController>();
 
   @override
   Widget build(BuildContext context) {
@@ -186,9 +191,16 @@ class OtherUserProfileView extends GetView<OtherUserProfileController> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        SizedBox(
-          height: 42,
-          child: SvgPicture.asset('assets/imgs/message.svg'),
+        GestureDetector(
+          onTap: () {
+            debugPrint('On Messages Tapped');
+            //Todo
+            startChat(userId, 'User Name');
+          },
+          child: SizedBox(
+            height: 42,
+            child: SvgPicture.asset('assets/imgs/message.svg'),
+          ),
         ),
         Obx(
           () => FollowFollowingButton(
@@ -200,6 +212,27 @@ class OtherUserProfileView extends GetView<OtherUserProfileController> {
         ),
       ],
     );
+  }
+
+  Future<void> startChat(String contactId, String contactName) async {
+    final currentUserId = FirebaseAuth.instance.currentUser?.uid;
+    if (currentUserId == null) return;
+
+    try {
+      final chatId = await _chatService.createChatIfNotExists(
+        userId1: currentUserId,
+        userId2: contactId,
+        avatorUser1: profileController.avator.value,
+        currentUserName: profileController.nameController.text,
+        oppositeUserName: contactName,
+      );
+      if (chatId != null) {
+        Get.to(() => OneToOneChatPage(chatID: chatId, chatName: contactName));
+      }
+    } catch (e) {
+      debugPrint("Error starting chat: $e");
+      Get.snackbar('Error', 'Failed to start chat: ${e.toString()}');
+    }
   }
 
   Widget _buildGridView() {
@@ -261,10 +294,7 @@ class DoneFollowing extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              'Following',
-              style: normalBodyStyle.copyWith(fontSize: 16),
-            ),
+            Text('Following', style: normalBodyStyle.copyWith(fontSize: 16)),
           ],
         ),
       ),

@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
+
 class HelpersMethod {
   // Parse Int with Default Value
   int parseIntWithDefault(dynamic value, int defaultValue) {
@@ -46,5 +49,19 @@ class HelpersMethod {
       }
     }
     return [];
+  }
+
+  static String getFormattedTimeFromTimestamp(dynamic timestamp) {
+    DateTime dateTime;
+
+    if (timestamp is Timestamp) {
+      dateTime = timestamp.toDate();
+    } else if (timestamp is DateTime) {
+      dateTime = timestamp;
+    } else {
+      return 'Invalid time';
+    }
+
+    return DateFormat('h:mm a').format(dateTime); // e.g., 4:15 PM
   }
 }
