@@ -39,7 +39,7 @@ class _OneToOneChatPageState extends State<OneToOneChatPage> {
 
   Future<void> onSendButtonTapped() async {
     if (chatInputController.text.isNotEmpty) {
-      _oneToOneChatService.sendMessage(
+      await _oneToOneChatService.sendMessage(
         chatID: widget.chatID,
         text: chatInputController.text,
       );
@@ -55,7 +55,7 @@ class _OneToOneChatPageState extends State<OneToOneChatPage> {
     });
     final resultUrl = await MediaUploadService().uploadImage();
     if (resultUrl != null) {
-      _oneToOneChatService.sendMessage(
+      await _oneToOneChatService.sendMessage(
         chatID: widget.chatID,
         mediaLink: resultUrl,
         messageType: 'image',
@@ -86,7 +86,9 @@ class _OneToOneChatPageState extends State<OneToOneChatPage> {
 
   @override
   void initState() {
-    scrollToTheEndOfChat();
+    Future.delayed(Duration(seconds: 3), () {
+      scrollToTheEndOfChat();
+    });
     super.initState();
   }
 

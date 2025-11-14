@@ -6,7 +6,7 @@ import 'package:only_u/app/services/user_service.dart';
 class OtherUserProfileController extends GetxController {
   var isFollowing = false.obs;
   var followers = 0.obs;
-  var postsCount = 13.obs;
+  var postsCount = 0.obs;
   var following = 0.obs;
   var otherUserId = "";
   var userName = "".obs;
@@ -15,11 +15,8 @@ class OtherUserProfileController extends GetxController {
   var otherUserAvator = defaultAvatorUrl.obs;
   var loadingOtherUserProfile = false.obs;
   var postsImages = [].obs;
+  var loadingChat = false.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
   Future<void> followUser({required String followingId}) async {
     final response = await UserService().followOtherUser(

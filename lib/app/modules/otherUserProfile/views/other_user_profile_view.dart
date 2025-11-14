@@ -159,38 +159,11 @@ class OtherUserProfileView extends GetView<OtherUserProfileController> {
   }
 
   Widget _buildAvatorPart() {
-    return Align(
-      alignment: Alignment.center,
-      child: Container(
-        height: 60,
-        width: 60,
-        clipBehavior: Clip.antiAlias,
-        decoration: ShapeDecoration(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(546.88),
-          ),
-          shadows: [
-            BoxShadow(
-              color: Color(0x3FFFFFFF),
-              blurRadius: 17.50,
-              offset: Offset(0, 0),
-              spreadRadius: 0,
-            ),
-          ],
-        ),
-        child: Obx(
-          () => Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(controller.otherUserAvator.value),
-                fit: BoxFit.fill,
-              ),
-            ),
-          ),
-        ),
-      ),
+    return StatusAvatar(
+      size: 60,
+      imageUrl: controller.otherUserAvator.value,
+      isOnline: true,
+      borderColor: Colors.white,
     );
   }
 
@@ -224,7 +197,7 @@ class OtherUserProfileView extends GetView<OtherUserProfileController> {
           onTap: () {
             debugPrint('On Messages Tapped');
             //Todo
-            startChat(userId, 'User Name');
+            startChat(userId, controller.userName.value);
           },
           child: SizedBox(
             height: 42,
@@ -358,6 +331,81 @@ class DoneFollowing extends StatelessWidget {
             Text('Following', style: normalBodyStyle.copyWith(fontSize: 16)),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class StatusAvatar extends StatelessWidget {
+  final double size;
+  final String? imageUrl;
+  final bool isOnline;
+  final Color onlineColor;
+  final Color offlineColor;
+  final Color borderColor;
+
+  const StatusAvatar({
+    super.key,
+    this.size = 56,
+    this.imageUrl,
+    required this.isOnline,
+    this.onlineColor = Colors.green,
+    this.offlineColor = Colors.grey,
+    this.borderColor = Colors.white,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: size,
+      height: size,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          // Circular avatar
+          ClipOval(
+            child: imageUrl != null && imageUrl!.isNotEmpty
+                ? CachedNetworkImage(
+                    imageUrl: imageUrl!,
+                    width: size,
+                    height: size,
+                    fit: BoxFit.cover,
+                  )
+                : Container(
+                    width: size,
+                    height: size,
+                    color: Colors.blueGrey.shade200,
+                    alignment: Alignment.center,
+                    child: Icon(
+                      Icons.person,
+                      size: size * 0.55,
+                      color: Colors.white,
+                    ),
+                  ),
+          ),
+
+          // Status dot (top-right)
+          Positioned(
+            right: -1,
+            top: -1,
+            child: Container(
+              width: size * 0.2,
+              height: size * 0.2,
+              decoration: BoxDecoration(
+                color: isOnline ? onlineColor : offlineColor,
+                shape: BoxShape.circle,
+                border: Border.all(color: borderColor, width: size * 0.01),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 2,
+                    offset: const Offset(0, 1),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

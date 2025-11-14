@@ -36,11 +36,15 @@ class MediaUploadService {
       String? userId = FirebaseAuth.instance.currentUser?.uid;
       final ImagePicker picker = ImagePicker();
       XFile? image = await picker.pickImage(source: ImageSource.gallery);
+      debugPrint('Pickec image: ${image?.path}');
 
-      if (image == null) return null;
+      if (image == null) {
+        debugPrint("No image selected");
+        return null;
+      }
 
       Reference ref = _storage.ref().child(
-        "user_uploads/$userId/${DateTime.now().millisecondsSinceEpoch}.jpg",
+        "user_uploads/$userId/${DateTime.now().millisecondsSinceEpoch}",
       );
       UploadTask uploadTask = ref.putFile(File(image.path));
 
